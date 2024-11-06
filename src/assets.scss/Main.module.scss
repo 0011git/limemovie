@@ -1,0 +1,59 @@
+.overview{
+    width: 32%;
+    height: 320px;
+    padding: 40px 60px;
+    position: absolute;
+    background-color: rgba($color: #0C0B0E, $alpha: 0.3);
+    border-radius: 20px;
+    top: 24%;
+    left: 4%;
+    z-index: 100;
+    h2{
+        color: #fafafa;
+        font-weight: 700;
+        font-size: 52px;
+    }
+    p{
+        margin-top: 16px;
+        margin-bottom: 32px;
+        color: #fafafa;
+        line-height: 180%;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2; /* 최대 2줄로 제한 */
+        overflow: hidden; /* 넘치는 내용 숨김 */
+        text-overflow: ellipsis; /* 생략 부호 추가 */
+    }
+    button{
+        padding: 12px 32px;
+        border-radius: 8px;
+        color: #19171B;
+        font-weight: 700;
+        background-color: #E3FF00;
+        transition: 0.2s;
+        &:hover{
+            transform: translateY(-4px);
+            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
+        }
+    }
+}
+
+.mainArticle{
+    &:first-of-type{
+        margin-top: 80px;
+    }
+    &:not(:last-of-type){
+        margin-bottom: 200px;
+    }
+}
+
+.email{
+    padding: 200px 40px;
+    h2{
+        margin-bottom: 40px;
+        color: #fafafa;
+        font-size: 40px;
+        font-weight: 700;
+        text-align: center;
+    }
+}

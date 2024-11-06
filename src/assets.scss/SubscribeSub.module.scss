@@ -1,0 +1,21 @@
+.subscribe{
+    // text-align: center;
+    label{
+        display: flex;
+        justify-content: center;
+        input{
+            width: 320px;
+            padding: 16px 16px 16px 32px;
+            border: 4px solid #E3FF00;
+            border-radius: 8px 0 0 8px;
+            // background: none;
+        }
+        button{
+            padding: 16px 24px;
+            background-color: #E3FF00;
+            border-radius:0 8px 8px 0;
+            font-weight: 700;
+            color: #19171B;
+        }
+    }
+}

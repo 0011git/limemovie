@@ -1,0 +1,16 @@
+.basicSlide{
+    .titleWrap{
+        position: relative;
+        .title{
+            margin-bottom: 16px;
+            color: #fafafa;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .viewMore{
+            position: absolute;
+            top: 32%;
+            right: 0;
+        }
+    }
+}

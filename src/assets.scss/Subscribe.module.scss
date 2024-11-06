@@ -1,0 +1,48 @@
+.subscribe{
+    display: flex;
+    justify-content: center;
+    &.activeSubscribe{
+        .inputWrap{
+            input{
+                color: #E3FF00;
+            }
+            .reset{
+                display: block;
+            }
+        }
+    }
+    .inputWrap{
+        position: relative;
+        input{
+            width: 100%;
+            width: 400px;
+            padding: 16px 48px 16px 32px;
+            border: 4px solid #E3FF00;
+            border-radius: 20px 0 0 20px;
+            font-size: 18px;
+            background: none;
+            
+        }
+        .reset{
+            display: none;
+            width: 20px;
+            height: 20px;
+            padding: 0;
+            position: absolute;
+            top: 50%;
+            right: 8%;
+            transform: translate(50%, -50%);
+            background: url('../assets.img/reset.svg') center no-repeat;
+            background-size: contain;
+        }
+    }
+    button{
+        padding: 16px 32px;
+        background-color: #E3FF00;
+        border-radius:0 20px 20px 0;
+        font-weight: 700;
+        font-size: 18px;
+        color: #19171B;
+        white-space: nowrap;
+    }
+}
