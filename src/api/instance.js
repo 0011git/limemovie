@@ -1,3 +1,4 @@
+// api요청시 CORS이슈x, 서버 없이 진행
 // https://www.npmjs.com/package/axios
 import axios from 'axios';
 
