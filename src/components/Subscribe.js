@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import subscribeScss from '../assets.scss/Subscribe.module.scss'
+import subscribeScss from '../styles/Subscribe.module.scss'
 
 const Subscribe = () => {
   const [email, setEmail] = useState('');

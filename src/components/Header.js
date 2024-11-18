@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { HashRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import headerScss from '../assets.scss/Header.module.scss';
-import '../assets.scss/App.scss'
+import headerScss from '../styles/Header.module.scss';
+import '../styles/App.scss'
 import Search from './Search'
-import Logo from './Logo';
 
 
 const Header = () => {
@@ -35,7 +34,7 @@ const Header = () => {
       <header className={`${headerScss.header} ${down ? headerScss.hide : ''}`}>
         <div className={headerScss.inner}>
           <Link to='/'>
-            <Logo />
+            <h1 className='logo'></h1>
           </Link>
           <div className={headerScss.navWrap}>
             <nav>

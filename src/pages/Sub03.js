@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import FooterSub from '../components/sub/FooterSub'
-import sub01Scss from '../assets.scss/Sub01.module.scss'
+import sub01Scss from '../styles/Sub01.module.scss'
 import SubTitle from '../components/sub/SubTitle'
 import SubBtnWrap from '../components/sub/SubBtnWrap'
 import SubImgWrap from '../components/sub/SubImgWrap'

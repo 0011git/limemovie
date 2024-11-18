@@ -43,8 +43,16 @@ const genres = [
     {"id": 10770,"name": "TV 영화"},
     {"id": 999999,"name": "2시간 이하 짧은 영화"}
 ]
+const chooseTwoRandomGenres = () => {
+    const ranidx1 = Math.floor(Math.random() * genres.length);
+    let ranidx2;
+    do {
+        ranidx2 = Math.floor(Math.random() * genres.length);
+    }while(ranidx2 === ranidx1)
+    return [genres[ranidx1].id, genres[ranidx2].id]
+}
 
-let selectedGenres = [28, 878];
+let selectedGenres = chooseTwoRandomGenres();
 let keyword = '검색키워드';
 let movieId = 1022789;    
 
@@ -54,11 +62,11 @@ const instance = axios.create({
     params: defaultParams    
 });
 
-let visual = [
-    '/movie/157336?append_to_response=videos',
-    '/movie/157336?append_to_response=videos',
-    '/movie/157336?append_to_response=videos'
-]
+// let visual = [
+//     '/movie/157336?append_to_response=videos',
+//     '/movie/157336?append_to_response=videos',
+//     '/movie/157336?append_to_response=videos'
+// ]
 
 let top_rated= [
     '/movie/top_rated?sort_by=popularity.desc&page=1',
@@ -81,20 +89,20 @@ export async function apiMain(){
         instance.get('/discover/movie?sort_by=popularity.desc&with_genres=28,878&page=1')
     ])
 
-    return {visual1,visual2,visual3, trending ,releaseThisWeek, top_rated1, twoHours, sfAction};
+    return {visual1, visual2, visual3, trending ,releaseThisWeek, top_rated1, twoHours, sfAction};
 }
 
-export async function apiSub01(){
+export async function apiSub01(page){
     let [releaseThisWeek, nowPlaying] = await Promise.all([
-        instance.get('/discover/movie?sort_by=popularity.desc&with_release_type=2|3|4&release_date.gte=2024-09-05&release_date.lte=2024-09-12'),
-        instance.get('movie/now_playing?')
+        instance.get(`/discover/movie?sort_by=popularity.desc&with_release_type=2|3|4&release_date.gte=2024-09-05&release_date.lte=2024-09-12&page=${page}`),
+        instance.get(`movie/now_playing?page=${page}`)
     ])
     return {releaseThisWeek, nowPlaying};
 }
 
-export async function apiSub02(){
+export async function apiSub02(page){
     let [trending, top_rated1,top_rated2,top_rated3,top_rated4,top_rated5] =  await Promise.all([
-        instance.get('/trending/movie/week'),
+        instance.get(`/trending/movie/week?page=${page}`),
         ...top_rated.map(obj => {
             return instance.get(obj)
         })
@@ -102,10 +110,10 @@ export async function apiSub02(){
     return {trending, top_rated1,top_rated2,top_rated3,top_rated4,top_rated5};
 }
 
-export async function apiSub03(){
+export async function apiSub03(page){
     let [genres, twoHours] = await Promise.all([
-        instance.get('/discover/movie?sort_by=popularity.desc&with_genres=28,878'),
-        instance.get('/discover/movie?sort_by=popularity.desc&with_genres=28,878&with_runtime.lte=120')
+        instance.get(`/discover/movie?sort_by=popularity.desc&with_genres=28,878`),
+        instance.get(`/discover/movie?sort_by=popularity.desc&with_genres=28,878&with_runtime.lte=120&page=${page}`)
     ])
     return {genres, twoHours};
 }
@@ -120,18 +128,72 @@ export async function apiDetails(movieId){
     return {watchProviders, certification, info, similar};
 }
 
-export async function apiSearchResult(keyword){
+export async function apiSearchResult(keyword, page){
     console.log(keyword);
-    let result = await instance.get(`/discover/movie?&sort_by=populcarity.desc&with_text_query=${keyword}`);
-    return result;
+    let result = await instance.get(`/discover/movie?&sort_by=populcarity.desc&with_text_query=${keyword}&page=${page}`);
+    return {result};
 }
 
 
+// 메인비주얼: id 사진 타이틀 줄거리 동영상
+// https://api.themoviedb.org/3/movie/157336?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-kr&region=KR&append_to_response=videos
+// 1022789
+// 508442
+// 533535
 
-// Promise.all([axios.get(),axios.get()])
-// .then(res=>{
-//     [{},{}]
-//     res
-// })
+// 메인하단슬라이드: id 사진
+//     카테고리에서 5개 선정, 주소 뒤에 &page=1 붙이기
 
-// let [a,b] = await Promise.all([axios.get(),axios.get()])
+// 카테고리: id 사진 카테고리별정보(true|false로)
+//     1. 상영중
+//     <날짜 조정 필요함>
+//     이번 주 새로 개봉한 영화(영화관)
+//     https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&with_release_type=2|3&release_date.gte=2024-09-05&release_date.lte=2024-09-12
+
+//     이번 주 새로 개봉한 영화(디지털)
+//     https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&with_release_type=4&release_date.gte=2024-09-05&release_date.lte=2024-09-12
+
+//     이번 주 새로 개봉한 영화(영화관+디지털)
+//     https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&&region=KR&sort_by=popularity.desc&with_release_type=2|3|4&release_date.gte=2024-09-05&release_date.lte=2024-09-12
+
+//     상영 중인 영화(영화관) now_playing
+//     https://api.themoviedb.org/3/movie/now_playing?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR
+
+
+
+
+
+//     2. 인기
+//     지금 뜨는 콘텐츠(이번주) : trending/movie/week
+//     https://api.themoviedb.org/3/trending/movie/week?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR
+
+//     TOP 100 : 평점 높은 순(vote_average), popularity.desc 정렬, page=1~5까지
+//     https://api.themoviedb.org/3/movie/top_rated?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&page=1
+//     https://api.themoviedb.org/3/movie/top_rated?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&page=2
+//     https://api.themoviedb.org/3/movie/top_rated?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&page=3
+//     https://api.themoviedb.org/3/movie/top_rated?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&page=4
+//     https://api.themoviedb.org/3/movie/top_rated?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&page=5
+
+
+//     3. 장르(중복검색가능)
+//     https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&with_genres=28,878
+
+//     2시간이하
+//     https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&with_runtime.lte=120&with_genres=16,28
+
+
+// 검색: id 사진 타이틀 개봉연도 평점(vote_average) 장르2개 줄거리
+// https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&with_text_query=노래
+
+
+// 디테일페이지(id필요): id 사진 타이틀 개봉연도 나이제한 시간 장르1개 줄거리 주연 
+//             / 시청플랫폼 장르모두 평점 개봉연월일 출연 동영상 유사콘텐츠
+
+//     시청플랫폼(지역KR)
+//     https://api.themoviedb.org/3/movie/157336/watch/providers?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR
+
+//     나이제한(지역KR - certification)
+//     https://api.themoviedb.org/3/movie/157336/release_dates?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR
+
+//     나머지
+//     https://api.themoviedb.org/3/movie/157336?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-kr&region=KR&append_to_response=videos,casts

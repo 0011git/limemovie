@@ -21,22 +21,12 @@ section{
 // 라임 (lime)            #E3FF00
 
 .logo{
-  color: $white;
-  font-size: 32px;
-  font-weight: 700;
-  span{
-      color: $lime;
-      font-size: inherit;
-      font-weight: inherit;
-      font-family: inherit;
-  }
-  &::before{
-      width: 32px;
-      height: 32px;
-      margin-right: 8px;
-      display: inline-block;
+  &::after {
+      width: 200px;
+      height: 36px;
+      display: block;
       content: '';
-      background: url('../assets.img/lime.svg') center no-repeat;
+      background: url('../assets.img/logo.svg') center no-repeat;
       background-size: contain;
   }
 }

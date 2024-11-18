@@ -1,5 +1,5 @@
 import React from 'react'
-import snsScss from '../assets.scss/SnsBtn.module.scss'
+import snsScss from '../styles/SnsBtn.module.scss'
 
 const SnsBtn = () => {
   return (

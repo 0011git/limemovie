@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
-import bsScss from '../../assets.scss/BasicSlide.module.scss'
+import bsScss from '../../styles/BasicSlide.module.scss'
 import { useStore } from '../../store/store'
 
 // Import Swiper styles

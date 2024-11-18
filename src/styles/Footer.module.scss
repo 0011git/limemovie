@@ -7,6 +7,11 @@
     .footerWrap{
         padding-top: 32px;
         vertical-align: middle;
+        .logo{
+            &::after{
+                margin: 0 auto;
+            }
+        }
         ul{
             margin-top: 12px;
             li{

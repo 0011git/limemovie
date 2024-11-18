@@ -1,5 +1,5 @@
-import './assets.scss/reset.scss';
-import './assets.scss/App.scss';
+import './styles/reset.scss';
+import './styles/App.scss';
 import { HashRouter as Router, Route, Routes, Link, useLocation } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import Main from './pages/Main';

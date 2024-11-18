@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react'
 import Header from '../components/Header'
 import FooterSub from '../components/sub/FooterSub'
 import SubLoadMore from '../components/sub/SubLoadMore'
-import searchResultScss from '../assets.scss/SearchResult.module.scss'
+import searchResultScss from '../styles/SearchResult.module.scss'
 import { apiSearchResult } from '../api/instance'
 
 const SearchResult = () => {

@@ -1,6 +1,5 @@
 import React from 'react'
-import fsScss from '../../assets.scss/FooterSub.module.scss';
-import Logo from '../../components/Logo';
+import fsScss from '../../styles/FooterSub.module.scss';
 import PolicyBtn from '../../components/PolicyBtn';
 import SnsBtn from '../../components/SnsBtn';
 import Subscribe from '../Subscribe';
@@ -12,7 +11,7 @@ const FooterSub = () => {
       <div className={fsScss.footerWrap}>
         <div className={fsScss.upperWrap}>
           <div className={fsScss.leftWrap}>
-            <Logo />
+            <span className='logo'></span>
             <ul>
               <li>
                 <p>이 웹사이트는 리액트와 TMDB API를 이용해 학습용으로 제작되었습니다.</p>

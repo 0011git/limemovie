@@ -1,5 +1,5 @@
 import React from 'react'
-import subssScss from '../../assets.scss/SubscribeSub.module.scss'
+import subssScss from '../../styles/SubscribeSub.module.scss'
 
 const SubscribeSub = () => {
  

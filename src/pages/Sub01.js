@@ -1,29 +1,34 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import FooterSub from '../components/sub/FooterSub'
-import sub01Scss from '../assets.scss/Sub01.module.scss'
+import sub01Scss from '../styles/Sub01.module.scss'
 import SubTitle from '../components/sub/SubTitle'
 import SubBtnWrap from '../components/sub/SubBtnWrap'
 import SubImgWrap from '../components/sub/SubImgWrap'
 import SubLoadMore from '../components/sub/SubLoadMore'
 import store from '../store/store'
 import GenreBtn from '../components/GenreBtn'
+import { apiSub01 } from '../api/instance'
 
 const Sub01 = () => {
   const title = '최신 콘텐츠'
   const btnNameArr = ['이번 주에 개봉한 영화', '영화관에서 지금 상영 중인 영화'];   
-  const { sub01Data, loading, apiSub01 } = store();
-
+  const [sub01Data, setSub01Data] = useState({});
+  const { loading } = store();
+  const [page, setPage] = useState(1);
   const initialArr = Array(btnNameArr.length).fill(false);
   const [isActive, setIsActive] = useState(initialArr);
   const [category, setCategory] = useState([]);
 
   useEffect(() => {
-    apiSub01();
-  }, [])
-  if(loading || sub01Data == {}) return <>loading...</>
+    const data = apiSub01(page);
+    setSub01Data (() => {...sub01Data, data})
+  }, [page])
 
-  let releaseThisWeek = sub01Data.releaseThisWeek.data.results;
+  if(loading || sub01Data == {}) return <div>loading...</div>
+
+
+  let releaseThisWeek = sub01Data.releaseThisWeek.data.results ? sub01Data.releaseThisWeek.data.results : {};
   let nowPlaying = sub01Data.nowPlaying.data.results;
   const categoryArr = [releaseThisWeek, nowPlaying]
   
