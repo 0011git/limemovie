@@ -14,3 +14,13 @@
         }
     }
 }
+
+// 더보기 버튼
+.viewMoreBtnWrap{
+    button{
+        color: #fafafa;
+        &:hover{
+            text-decoration: underline;
+        }
+    }
+}

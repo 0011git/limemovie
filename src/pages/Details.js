@@ -1,14 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Header from '../components/Header'
-import FooterSub from '../components/sub/FooterSub'
 import DetailScss from '../styles/Details.module.scss'
 import BasicSlide from '../components/slide/BasicSlide'
-import CastSlide from '../components/slide/CastSlide'
-import TrailerSlide from '../components/slide/TrailerSlide'
+// import CastSlide from '../components/slide/CastSlide'
+// import TrailerSlide from '../components/slide/TrailerSlide'
 import { apiDetails } from '../api/instance'
 import { useLocation } from 'react-router-dom'
 
-
+// 스와이퍼
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
 
 const Details = () => {
     const {state} = useLocation();  //id받기
@@ -33,13 +36,11 @@ const Details = () => {
       console.log(details.watchProviders);
   return (
     <>
-        <Header />
-        <main className={DetailScss.subDetailsWrap}>
+        <div className={DetailScss.subDetailsWrap}>
             <SubVisual info={details.info} cer={details.certification} />
             <SubDetails info={details.info} watch={details.watchProviders} />
             <SubSimilar similar={details.similar} />
-        </main>
-        <FooterSub />
+        </div>
     </>
   )
 }
@@ -249,7 +250,6 @@ const SubDetails = ({info, watch}) => {
     )
 }
 
-
 const SubSimilar = ({similar}) => {
     let posterArr =[];
     posterArr = (similar.results).map((obj) => (
@@ -268,4 +268,50 @@ const SubSimilar = ({similar}) => {
     )
 }
 
+const CastSlide = ({castsArr}) => {
+    const swiperRef = useRef();
+  
+    return (
+      <div>
+          <Swiper
+            className='castSlide'
+            slidesPerView={5}
+            slidesPerGroup={5}
+            spaceBetween={12}
+            centeredSlides={false}
+            navigation={true}
+            modules={[Navigation]}
+            ref={swiperRef}
+          >
+            {castsArr.map((obj) => (
+                <SwiperSlide key={obj.credit_id}>
+                  <img src={'https://image.tmdb.org/t/p/w300/' + obj.profile_path} alt={obj.name} />
+                  <p>{obj.name}</p>
+                </SwiperSlide>
+            ))}
+          </Swiper>
+      </div>
+    )
+}
+
+const TrailerSlide = ({trailersArr}) => {
+    return (
+      <Swiper
+          className='trailerSlide'
+          slidesPerView={1}
+          spaceBetween={12}
+          navigation={true}
+          pagination={{clickable: true}} 
+          modules={[Navigation, Pagination]} 
+      >
+        {trailersArr.map((video) => (
+          <SwiperSlide key={video.key}>
+            <div>
+              <iframe allowFullScreen className='youtube' src={'https://www.youtube.com/embed/' + video.key}></iframe>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    )
+  }
 export default Details

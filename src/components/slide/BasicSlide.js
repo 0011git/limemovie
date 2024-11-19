@@ -1,17 +1,14 @@
 import React, { useRef } from 'react'
-// Import Swiper React components
-import { Swiper, SwiperSlide } from 'swiper/react';
-import bsScss from '../../styles/BasicSlide.module.scss'
-import { useStore } from '../../store/store'
-
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/navigation';
-// import required modules
-import { Navigation, Autoplay } from 'swiper/modules';
+import basicSlideStyle from '../../styles/basicSlide.module.scss'
 import { useNavigate } from 'react-router-dom';
 
-import ViewMoreBtn from '../ViewMoreBtn';
+
+// 스와이퍼
+import 'swiper/css';
+import 'swiper/css/navigation';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Autoplay } from 'swiper/modules';
+
 
 const BasicSlide = ({title, posterArr}) => {
   const swiperRef = useRef();
@@ -26,10 +23,10 @@ const BasicSlide = ({title, posterArr}) => {
 
   return (
     <>
-      <div className={bsScss.basicSlide} onMouseEnter={onHover} onMouseLeave={offHover}>
-        <div className={bsScss.titleWrap}>
-          <h2 className={bsScss.title}>{title}</h2>
-          <div className={bsScss.viewMore}>
+      <div className={basicSlideStyle.basicSlide} onMouseEnter={onHover} onMouseLeave={offHover}>
+        <div className={basicSlideStyle.titleWrap}>
+          <h2 className={basicSlideStyle.title}>{title}</h2>
+          <div className={basicSlideStyle.viewMore}>
             <ViewMoreBtn />
           </div>
         </div>
@@ -64,4 +61,12 @@ const BasicSlide = ({title, posterArr}) => {
   )
 }
 
+// 더보기 버튼
+const ViewMoreBtn = () => {
+  return (
+    <div className={basicSlideStyle.viewMoreBtnWrap}>
+      <button>더보기</button>
+    </div>
+  )
+}
 export default BasicSlide

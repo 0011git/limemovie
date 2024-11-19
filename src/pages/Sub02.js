@@ -1,33 +1,28 @@
 import React, { useEffect, useState } from 'react'
-import Header from '../components/Header'
-import FooterSub from '../components/sub/FooterSub'
-import sub01Scss from '../styles/Sub01.module.scss'
-import SubTitle from '../components/sub/SubTitle'
+import subStyle from '../styles/sub.module.scss'
 import SubBtnWrap from '../components/sub/SubBtnWrap'
 import SubImgWrap from '../components/sub/SubImgWrap'
-import SubLoadMore from '../components/sub/SubLoadMore'
+import LoadMoreBtn from '../components/sub/LoadMoreBtn'
 import store from '../store/store'
 import GenreBtn from '../components/GenreBtn'
 
 const Sub02 = () => {
-  const title = '인기'
   let btnNameArr = ['지금 뜨는 콘텐츠', 'TOP 100'];
   const { sub02Data, loading, apiSub02 } = store();
+  const [page, setPage] = useState(1);
 
   const initialArr = Array(btnNameArr.length).fill(false);
   const [isActive, setIsActive] = useState(initialArr);
   const [category, setCategory] = useState([]);
 
   useEffect(() => {
-    apiSub02();
-  }, [])
+    apiSub02(page);
+  }, [page])
   if(loading) return <>loading...</>
 
-  let trending = sub02Data.trending.data.results
-  console.log(trending);
-  // console.log(sub02Data.top_rated1.data.results);
+  let trending = sub02Data.trending;
   const topRated100 = sub02Data.top_rated1.data.results.concat(sub02Data.top_rated2.data.results, sub02Data.top_rated3.data.results, sub02Data.top_rated4.data.results, sub02Data.top_rated5.data.results)
-  // console.log(topRated100);
+
   const categoryArr = [trending, topRated100]
   
   const chooseGenres = (e) => {
@@ -47,25 +42,21 @@ const Sub02 = () => {
 
 
   return (
-    <div className={sub01Scss.sub01}>
-      <Header />
+    <div className={subStyle.sub01}>
       <section>
-        <SubTitle title={title} />
-        {/* <SubBtnWrap btnNameArr={btnNameArr} /> */}
-        <div>
-            <ul style={{margin:'40px 0', display:'flex', flexWrap:'wrap'}}>
-                {btnNameArr.map((name, idx) => (
-                  <li onClick={chooseGenres} key={name} style={{margin:'0 12px 12px 0'}}>
-                      <GenreBtn name={name} isActive={isActive[idx]} />
-                  </li>
-                ))}
-            </ul>
-        </div>
+      <h2 className={subStyle.title}>인기</h2>
 
-        <SubImgWrap imgArr={category} />
-        <SubLoadMore />
+      <ul className={subStyle.tabWrap}>
+          {btnNameArr.map((name, idx) => (
+            <li onClick={chooseGenres} key={name} style={{margin:'0 12px 12px 0'}}>
+                <GenreBtn name={name} isActive={isActive[idx]} />
+            </li>
+          ))}
+      </ul>
+
+      <SubImgWrap imgArr={category} />
+      <LoadMoreBtn page={page} setPage={setPage} />
       </section>
-      <FooterSub />
     </div>
   )
 }

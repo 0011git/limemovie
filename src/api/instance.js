@@ -1,8 +1,9 @@
 // api요청시 CORS이슈x, 서버 없이 진행
 // https://www.npmjs.com/package/axios
 import axios from 'axios';
-
-const api_key = 'f89a6c1f22aca3858a4ae7aef10de967'
+// process.env.REACT_APP_SERVER_URL,
+// const api_key = 'f89a6c1f22aca3858a4ae7aef10de967'
+const api_key = process.env.REACT_APP_API_API_KEY;
 const defaultParams = 
     {
         api_key, 
@@ -57,8 +58,8 @@ let keyword = '검색키워드';
 let movieId = 1022789;    
 
 const instance = axios.create({
-    // baseURL: process.env.REACT_APP_SERVER_URL,
-    baseURL: 'https://api.themoviedb.org/3',
+    // baseURL: 'https://api.themoviedb.org/3',
+    baseURL: process.env.REACT_APP_API_BASE_URL,
     params: defaultParams    
 });
 
@@ -89,7 +90,17 @@ export async function apiMain(){
         instance.get('/discover/movie?sort_by=popularity.desc&with_genres=28,878&page=1')
     ])
 
-    return {visual1, visual2, visual3, trending ,releaseThisWeek, top_rated1, twoHours, sfAction};
+    return {
+        visual: [visual1.data,visual2.data,visual3.data],
+        // visual2: visual2.data,
+        // visual3: visual3.data,
+        trending: trending.data.results,
+        releaseThisWeek: releaseThisWeek.data.results,
+        top_rated1: top_rated1.data.results,
+        twoHours: twoHours.data.results,
+        sfAction: sfAction.data.results
+      };
+    // return {visual1, visual2, visual3, trending ,releaseThisWeek, top_rated1, twoHours, sfAction};
 }
 
 export async function apiSub01(page){
@@ -112,7 +123,7 @@ export async function apiSub02(page){
 
 export async function apiSub03(page){
     let [genres, twoHours] = await Promise.all([
-        instance.get(`/discover/movie?sort_by=popularity.desc&with_genres=28,878`),
+        instance.get(`/discover/movie?sort_by=popularity.desc&with_genres=28,878&page=${page}`),
         instance.get(`/discover/movie?sort_by=popularity.desc&with_genres=28,878&with_runtime.lte=120&page=${page}`)
     ])
     return {genres, twoHours};
@@ -129,7 +140,7 @@ export async function apiDetails(movieId){
 }
 
 export async function apiSearchResult(keyword, page){
-    console.log(keyword);
+    console.log(`검색어: ${keyword}`);
     let result = await instance.get(`/discover/movie?&sort_by=populcarity.desc&with_text_query=${keyword}&page=${page}`);
     return {result};
 }

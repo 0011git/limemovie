@@ -3,9 +3,6 @@
 body{
   background-color: $black;
 }
-main{
-  // padding-top: 80px;  //헤더 높이만큼 패딩
-}
 section{
   max-width: 1200px;
   margin: 0 auto;
@@ -19,7 +16,13 @@ section{
 // 밝은그레이             #454545
 // 화이트 (white)         #FAFAFA
 // 라임 (lime)            #E3FF00
+.loading{
+  padding: 100px;
+  color: #fafafa;
+  font-size: 52px;
+  text-align: center;
 
+}
 .logo{
   &::after {
       width: 200px;

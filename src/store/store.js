@@ -6,40 +6,71 @@ import { apiMain, apiSub01, apiSub02, apiSub03, apiDetails, apiSearchResult } fr
 
 const store = create((set)=>({
     loading: true,
+    setLoading: (value) => set({ loading: value }),
 
     mainData: {},
     apiMain: async () => {
-        await fetchData(apiMain, 'mainData', set)
+        await fetchData(apiMain, 'mainData', set, 1)
     },
 
-//     sub01Data: {},
-//     apiSub01: async () => {
-//          await fetchData(apiSub01, 'sub01Data', set)
-//     },
+    sub01Data: {nowPlaying:[], releaseThisWeek:[] },
+    apiSub01: async (page) => {
+        set( { loading:true } )
+        let res = await apiSub01(page);
+        console.log(res);
+        set((previous) => {
+            let data = {};
+            for(let key in res){
+                data[key] = res[key];
+            }
+            
+            let nowPlayingNewData = data.nowPlaying.data.results
+            let releaseThisWeekNewData = data.releaseThisWeek.data.results
 
-//     sub02Data: {},
-//     apiSub02: async () => {
-//          await fetchData(apiSub02, 'sub02Data', set)
-//     },
+            previous.sub01Data.nowPlaying.push(...nowPlayingNewData)
+            previous.sub01Data.releaseThisWeek.push(...releaseThisWeekNewData)
 
-//     sub03Data: {},
-//     apiSub03: async () => {
-//          await fetchData(apiSub03, 'sub03Data', set)
-//     },
+            return { loading: false }
+        })
+    },
+
+    sub02Data: {trending:[]},
+    apiSub02: async (page) => {
+          set( { loading:true } )
+        let res = await apiSub02(page);
+        
+        set((previous) => {
+            let data = {};
+            for(let key in res){
+                data[key] = res[key];
+            }
+
+            let trendingNewData = data.trending.data.results
+
+            previous.sub02Data.trending.push(...trendingNewData)
+            
+            return { loading: false }
+        })
+    },
+
+    sub03Data: {},
+    apiSub03: async (page) => {
+         await fetchData(apiSub03, 'sub03Data', set)
+    },
 
     detailsData: {},
     apiDetails: async () => {
          await fetchData(apiDetails, 'detailsData', set)
     },
 
-//     searchResultData: {},
-//     apiSearchResult: async () => {
-//          await fetchData(apiSearchResult, 'searchResultData', set)
-//     }
+    searchResultData: {},
+    apiSearchResult: async (page) => {
+         await fetchData(apiSearchResult, 'searchResultData', set)
+    }
 }))
 
 async function fetchData (instance, storedData, set) {
-   set({loading:true})
+   set({loading: true})
    let res = await instance();
    
    set(() => {

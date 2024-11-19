@@ -1,27 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import GenreBtn from '../GenreBtn'
 
 
 const SubBtnWrap = ({btnNameArr, isActive}) => {
-  // const isActiceInitialArr = Array(btnNameArr.length).fill(false);
-  // const [isActive, setIsActive] = useState(isActiceInitialArr);
-  // console.log(isActive);
-
-  // const chooseGenres = (e) => {
-  //   let state = [...isActive]
-  //   switch(e.target.innerText){
-  //     case btnNameArr[0]:
-  //       state = state.map((item) => item = false)
-  //       state[0] = true;
-  //       setIsActive([...state])
-  //       break;
-  //     case btnNameArr[1]:
-  //       state = state.map((item) => item = false)
-  //       state[1] = true;
-  //       setIsActive([...state])
-  //       break;
-  //   }
-  // }
 
   return (
     <div>

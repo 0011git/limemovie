@@ -1,39 +1,44 @@
-import React, { useEffect, useState } from 'react'
-import Header from '../components/Header'
-import FooterSub from '../components/sub/FooterSub'
-import sub01Scss from '../styles/Sub01.module.scss'
-import SubTitle from '../components/sub/SubTitle'
+import React, { useEffect, useRef, useState } from 'react'
+import subStyle from '../styles/sub.module.scss'
 import SubBtnWrap from '../components/sub/SubBtnWrap'
 import SubImgWrap from '../components/sub/SubImgWrap'
-import SubLoadMore from '../components/sub/SubLoadMore'
+import LoadMoreBtn from '../components/sub/LoadMoreBtn'
 import store from '../store/store'
 import GenreBtn from '../components/GenreBtn'
 import { apiSub01 } from '../api/instance'
 
+
 const Sub01 = () => {
-  const title = '최신 콘텐츠'
-  const btnNameArr = ['이번 주에 개봉한 영화', '영화관에서 지금 상영 중인 영화'];   
-  const [sub01Data, setSub01Data] = useState({});
-  const { loading } = store();
+  const btnNameArr = ['이번 주에 개봉한 영화', '영화관에서 지금 상영 중인 영화'];
+  const { loading, sub01Data, apiSub01  } = store();
   const [page, setPage] = useState(1);
+
   const initialArr = Array(btnNameArr.length).fill(false);
   const [isActive, setIsActive] = useState(initialArr);
   const [category, setCategory] = useState([]);
+  const btn = useRef(null);
 
   useEffect(() => {
-    const data = apiSub01(page);
-    setSub01Data (() => {...sub01Data, data})
+    apiSub01(page);
   }, [page])
 
-  if(loading || sub01Data == {}) return <div>loading...</div>
+  useEffect(()=>{
+    console.log('sdfsdfsfsfd===================')
+    if(btn.current) {
+      btn.current.querySelector('li').click();
+    } 
+  },[sub01Data])
 
-
-  let releaseThisWeek = sub01Data.releaseThisWeek.data.results ? sub01Data.releaseThisWeek.data.results : {};
-  let nowPlaying = sub01Data.nowPlaying.data.results;
-  const categoryArr = [releaseThisWeek, nowPlaying]
   
+  if(loading) return <div>loading...</div>;
 
+  console.log(sub01Data.releaseThisWeek);
+  console.log(category);
+  
   const chooseGenres = (e) => {
+    
+    let categoryArr = [sub01Data.releaseThisWeek, sub01Data.nowPlaying]
+
     let state = [...isActive]
     const selectedGenres = e.target.innerText
     const selectedIdx = btnNameArr.indexOf(selectedGenres)
@@ -43,34 +48,30 @@ const Sub01 = () => {
         state = state.map((item) => item = false)
         state[selectedIdx] = true;
         setIsActive(state);
+
         // 해당 콘텐츠 활성화
         setCategory([...categoryArr[selectedIdx]]);
     }
   }
 
-
+ 
   return (
-    <div className={sub01Scss.sub01}>
-      <Header />
-      <section>
-        <SubTitle title={title} />
-
-        {/* <SubBtnWrap btnNameArr={btnNameArr} isActive={isActive} /> */}
-        <div>
-            <ul style={{margin:'40px 0', display:'flex', flexWrap:'wrap'}}>
-                {btnNameArr.map((name, idx) => (
-                  <li onClick={chooseGenres} key={name} style={{margin:'0 12px 12px 0'}}>
-                      <GenreBtn name={name} isActive={isActive[idx]} />
-                  </li>
-                ))}
-            </ul>
-        </div>
-
-        <SubImgWrap imgArr={category} />
-        <SubLoadMore />
-      </section>
-      <FooterSub />
-    </div>
+    <section ref={btn} className={subStyle.subWrap}>
+      <h2 className={subStyle.title}>최신 콘텐츠</h2>
+      
+      <ul className={subStyle.tabWrap}>
+        {
+          btnNameArr.map((name, idx) => (
+            <li onClick={chooseGenres} key={idx} style={{margin:'0 12px 12px 0'}}>
+                <GenreBtn name={name} isActive={isActive[idx]} />
+            </li>
+          ))
+        }
+      </ul>
+      
+      <SubImgWrap imgArr={category} />
+      <LoadMoreBtn page={page} setPage={setPage} />
+    </section>
   )
 }
 

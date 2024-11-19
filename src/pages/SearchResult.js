@@ -1,7 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
-import Header from '../components/Header'
-import FooterSub from '../components/sub/FooterSub'
-import SubLoadMore from '../components/sub/SubLoadMore'
+import SubLoadMore from '../components/sub/LoadMoreBtn'
 import searchResultScss from '../styles/SearchResult.module.scss'
 import { apiSearchResult } from '../api/instance'
 
@@ -62,52 +60,48 @@ const SearchResult = () => {
   }
 
   return (
-    <>
-        <Header />
-        <main className={searchResultScss.searchResultWrap}>
-          <section className={searchResultScss.titleWrap}>
-            <h2>'{keyword}' 검색 결과</h2>
-            <p>총 {num}건</p>
-            <div className={searchResultScss.selectBox}>
-              <h5>정렬 : </h5>
-              <ul ref={ulRef} onClick={onOrderBy}>
-                <li>인기순<span></span></li>
-                <li>최신순<span></span></li>
-                <li>평점순<span></span></li>
-                <li>오름차순<span></span></li>
-                <li>내림차순<span></span></li>
-              </ul>
-            </div>
-          </section>
+    <div className={searchResultScss.searchResultWrap}>
+      <section className={searchResultScss.titleWrap}>
+        <h2>'{keyword}' 검색 결과</h2>
+        <p>총 {num}건</p>
+        <div className={searchResultScss.selectBox}>
+          <h5>정렬 : </h5>
+          <ul ref={ulRef} onClick={onOrderBy}>
+            <li>인기순<span></span></li>
+            <li>최신순<span></span></li>
+            <li>평점순<span></span></li>
+            <li>오름차순<span></span></li>
+            <li>내림차순<span></span></li>
+          </ul>
+        </div>
+      </section>
 
-          <section className={searchResultScss.searchResult}>
-            {searchResult.map((obj) => (
-              <div key={obj.id} className={searchResultScss.oneResult}>
-                <div className={searchResultScss.imgWrap}>
-                  <img src={'https://image.tmdb.org/t/p/w300/' + obj.poster_path} />
-                </div>
-                <div className={searchResultScss.textWrap}>
-                  <h3>{obj.title}</h3>
-                  <ul>
-                    <li>
-                      {
-                        obj.genre_ids.map((genre_id) => (
-                            ((genres.find((genre) => genre.id===genre_id)).name)
-                        )).slice(0,2).join(', ')
-                      }
-                    </li>
-                    <li>{obj.release_date.slice(0,4)}</li>
-                    <li>{obj.vote_average.toFixed(2)}점</li>
-                  </ul>
-                  <p>{obj.overview}</p>
-                </div>
-              </div>
-            ))}
-          </section>
-          <SubLoadMore name={name}/>
-        </main>
-        <FooterSub />
-    </>
+      <section className={searchResultScss.searchResult}>
+        {searchResult.map((obj) => (
+          <div key={obj.id} className={searchResultScss.oneResult}>
+            <div className={searchResultScss.imgWrap}>
+              <img src={'https://image.tmdb.org/t/p/w300/' + obj.poster_path} />
+            </div>
+            <div className={searchResultScss.textWrap}>
+              <h3>{obj.title}</h3>
+              <ul>
+                <li>
+                  {
+                    obj.genre_ids.map((genre_id) => (
+                        ((genres.find((genre) => genre.id===genre_id)).name)
+                    )).slice(0,2).join(', ')
+                  }
+                </li>
+                <li>{obj.release_date.slice(0,4)}</li>
+                <li>{obj.vote_average.toFixed(2)}점</li>
+              </ul>
+              <p>{obj.overview}</p>
+            </div>
+          </div>
+        ))}
+      </section>
+      <SubLoadMore name={name}/>
+    </div>
   )
 }
 

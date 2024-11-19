@@ -17,8 +17,8 @@ https://image.tmdb.org/t/p/original/
 https://image.tmdb.org/t/p/w300/
 
 
-All, 12, 15, 19, 제한상영가
-[0, 1, 2, 3, 4]
+[All, 12, 15, 19, 제한상영가] = [0, 1, 2, 3, 4]
+
 
 0. 메인 비주얼
 
