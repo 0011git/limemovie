@@ -1,0 +1,18 @@
+.loadMoreBtnWrap{
+    margin: 80px auto 300px;
+    text-align: center;
+    button{
+        padding: 4px 36px;
+        color: #fafafa;
+        background-color: #0C0B0E;
+        font-size: 14px;
+        font-weight: 400;
+        border: 1px solid #fafafa;
+        border-radius: 8px;
+        &:hover{
+            color: #0C0B0E;
+            background-color: #fafafa;
+            font-weight: 700;
+        }
+    }
+}

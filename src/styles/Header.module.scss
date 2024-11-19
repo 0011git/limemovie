@@ -1,0 +1,96 @@
+.header{
+    width: 100%;
+    background-color: rgba($color: #0C0B0E, $alpha: 0.7);  
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    transition: 0.2s;
+    
+    &.hide{
+        transform: translateY(-100%);
+    }
+
+   .inner{
+        max-width: 1200px;
+        height: 80px;
+        padding: 16px 4px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+       .navWrap{
+           width: 70%;
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           nav{
+               width: 45%;
+               margin-right: 24px;
+               text-align: right;
+               a{
+                   padding: 4px;
+                   font-size: 20px;
+                   &:not(:last-of-type){
+                       margin-right: 24px;
+                   }
+                   color: #fafafa;
+                   font-weight: 700;
+               }
+           }
+           
+       }
+   }
+
+}
+
+.searchWrap{
+    width: 90%;
+    position: relative;
+    .search{
+        width: 100%;
+        min-width: 360px;
+        position: relative;
+        input{
+            width: 100%;
+            padding: 12px 40px 12px 60px;
+            border-radius: 8px;
+            background-color: #19171B;
+            &::placeholder{
+                color: #3B383E;
+            }
+        }
+        label{
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            top: 50%;
+            left: 8%;
+            transform: translate(-50%, -50%);
+            background: url('../assets.img/search_grey.svg') center no-repeat;
+            background-size: contain;
+        }
+        .reset{
+            width: 16px;
+            height: 16px;
+            display: none;
+            position: absolute;
+            top: 50%;
+            right: 6%;
+            transform: translate(50%, -50%);
+            background: url('../assets.img/reset.svg') center no-repeat;
+            background-size: contain;
+        }
+        &.activeSearch{
+            input{
+                color: #E3FF00;
+            }
+            label{
+                background-image: url('../assets.img/search_lime.svg');
+            }
+            .reset{
+                display: block;
+            }
+        }
+    }
+}

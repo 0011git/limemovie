@@ -3,9 +3,6 @@
 body{
   background-color: $black;
 }
-main{
-  // padding-top: 80px;  //헤더 높이만큼 패딩
-}
 section{
   max-width: 1200px;
   margin: 0 auto;
@@ -19,24 +16,20 @@ section{
 // 밝은그레이             #454545
 // 화이트 (white)         #FAFAFA
 // 라임 (lime)            #E3FF00
+.loading{
+  padding: 100px;
+  color: #fafafa;
+  font-size: 52px;
+  text-align: center;
 
+}
 .logo{
-  color: $white;
-  font-size: 32px;
-  font-weight: 700;
-  span{
-      color: $lime;
-      font-size: inherit;
-      font-weight: inherit;
-      font-family: inherit;
-  }
-  &::before{
-      width: 32px;
-      height: 32px;
-      margin-right: 8px;
-      display: inline-block;
+  &::after {
+      width: 200px;
+      height: 36px;
+      display: block;
       content: '';
-      background: url('../assets.img/lime.svg') center no-repeat;
+      background: url('../assets.img/logo.svg') center no-repeat;
       background-size: contain;
   }
 }

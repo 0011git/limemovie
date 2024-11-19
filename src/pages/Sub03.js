@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import Header from '../components/Header'
-import FooterSub from '../components/sub/FooterSub'
-import sub01Scss from '../assets.scss/Sub01.module.scss'
-import SubTitle from '../components/sub/SubTitle'
+import subStyle from '../styles/sub.module.scss'
+import LoadMoreBtn from '../components/sub/LoadMoreBtn'
 import SubBtnWrap from '../components/sub/SubBtnWrap'
 import SubImgWrap from '../components/sub/SubImgWrap'
 
-import SubLoadMore from '../components/sub/SubLoadMore'
 import store from '../store/store'
 import GenreBtn from '../components/GenreBtn'
 
@@ -39,6 +36,7 @@ const Sub03 = () => {
     
     {"id": 999999, "name": "2시간 이하 짧은 영화"}
   ]
+  const [page, setPage] = useState(1);
   const btnNameArr = genres.map((obj) => obj.name);
 
   const initialArr = Array(btnNameArr.length).fill(false);
@@ -46,8 +44,8 @@ const Sub03 = () => {
   const [category, setCategory] = useState([]);
 
   useEffect(() => {
-    apiSub03();
-  }, [])
+    apiSub03(page);
+  }, [page])
   if(loading) return <>loading...</>
 
   // console.log(sub03Data);
@@ -79,26 +77,21 @@ const Sub03 = () => {
 
   
   return (
-    <div className={sub01Scss.sub01}>
-      <Header />
+    <div>
       <section>
-        <SubTitle title={title} />
+        <h2 className={subStyle.title}>장르</h2>
         
-        {/* <SubBtnWrap btnNameArr={btnNameArr} /> */}
-        <div>
-            <ul style={{margin:'40px 0', display:'flex', flexWrap:'wrap'}}>
-                {btnNameArr.map((name, idx) => (
-                  <li onClick={chooseGenres} key={name} style={{margin:'0 12px 12px 0'}}>
-                      <GenreBtn name={name} isActive={isActive[idx]} />
-                  </li>
-                ))}
-            </ul>
-        </div>
+        <ul className={subStyle.tabWrap}>
+            {btnNameArr.map((name, idx) => (
+              <li onClick={chooseGenres} key={name} style={{margin:'0 12px 12px 0'}}>
+                  <GenreBtn name={name} isActive={isActive[idx]} />
+              </li>
+            ))}
+        </ul>
 
         <SubImgWrap imgArr={twoHoursArr} />
-        <SubLoadMore />
+        <LoadMoreBtn page={page} setPage={setPage} />
       </section>
-      <FooterSub />
     </div>
   )
 }
