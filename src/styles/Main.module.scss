@@ -45,6 +45,20 @@
     &:not(:last-of-type){
         margin-bottom: 200px;
     }
+    .titleWrap{
+        position: relative;
+        .title{
+            margin-bottom: 16px;
+            color: #fafafa;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .viewMore{
+            position: absolute;
+            top: 32%;
+            right: 0;
+        }
+    }
 }
 
 .email{
@@ -55,6 +69,16 @@
         font-size: 40px;
         font-weight: 700;
         text-align: center;
+    }
+}
+
+// 더보기 버튼
+.viewMoreBtnWrap{
+    button{
+        color: #fafafa;
+        &:hover{
+            text-decoration: underline;
+        }
     }
 }
 

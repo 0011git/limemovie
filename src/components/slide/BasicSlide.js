@@ -10,7 +10,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 
 
-const BasicSlide = ({title, posterArr}) => {
+const BasicSlide = ({posterArr}) => {
   const swiperRef = useRef();
   const onHover = () => {
     swiperRef.current.swiper.autoplay.stop();
@@ -24,12 +24,12 @@ const BasicSlide = ({title, posterArr}) => {
   return (
     <>
       <div className={basicSlideStyle.basicSlide} onMouseEnter={onHover} onMouseLeave={offHover}>
-        <div className={basicSlideStyle.titleWrap}>
+        {/* <div className={basicSlideStyle.titleWrap}>
           <h2 className={basicSlideStyle.title}>{title}</h2>
           <div className={basicSlideStyle.viewMore}>
             <ViewMoreBtn />
           </div>
-        </div>
+        </div> */}
         <Swiper
             className='basic'
             slidesPerView={5}
@@ -44,12 +44,12 @@ const BasicSlide = ({title, posterArr}) => {
             navigation={true}
             modules={[Navigation, Autoplay]}
             ref={swiperRef}
-        >
+        > 
         {
           (posterArr && posterArr.length !== 0) ? (
             posterArr.map((obj, idx) => (
               <SwiperSlide key={obj.id} onClick={() => navi('/details', {state: obj.id}) }>
-                  <img src={obj.poster} alt={obj.title} />
+                  <img src={`https://image.tmdb.org/t/p/w300/${obj.poster_path}`} alt={`${obj.title} 포스터`} />
               </SwiperSlide>
             ))
           ) : (<div>Loading...</div>)
@@ -61,12 +61,5 @@ const BasicSlide = ({title, posterArr}) => {
   )
 }
 
-// 더보기 버튼
-const ViewMoreBtn = () => {
-  return (
-    <div className={basicSlideStyle.viewMoreBtnWrap}>
-      <button>더보기</button>
-    </div>
-  )
-}
+
 export default BasicSlide

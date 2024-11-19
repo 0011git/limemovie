@@ -7,10 +7,10 @@ import store from '../store/store'
 import GenreBtn from '../components/GenreBtn'
 import { apiSub01 } from '../api/instance'
 
-
 const Sub01 = () => {
   const btnNameArr = ['이번 주에 개봉한 영화', '영화관에서 지금 상영 중인 영화'];
-  const { loading, sub01Data, apiSub01  } = store();
+  const { loading, setLoading } = store();
+  const [sub01Data, setSub01Data] = useState({ releaseThisWeek: [], nowPlaying: [] });
   const [page, setPage] = useState(1);
 
   const initialArr = Array(btnNameArr.length).fill(false);
@@ -19,19 +19,31 @@ const Sub01 = () => {
   const btn = useRef(null);
 
   useEffect(() => {
-    apiSub01(page);
+    const fetchData = async() => {
+      const res = await apiSub01(page);
+      setLoading(false)
+      return res;
+    }
+    fetchData().then(res => { 
+      setSub01Data( prevData => ({
+      ...prevData,
+      releaseThisWeek: [...prevData.releaseThisWeek, ...res.releaseThisWeek],
+      nowPlaying: [...prevData.nowPlaying, ...res.nowPlaying]
+    }) );
+  }
+    )
   }, [page])
 
-  useEffect(()=>{
-    console.log('sdfsdfsfsfd===================')
-    if(btn.current) {
-      btn.current.querySelector('li').click();
-    } 
-  },[sub01Data])
+  // useEffect(()=>{
+  //   console.log('sdfsdfsfsfd===================')
+  //   if(btn.current) {
+  //     btn.current.querySelector('li').click();
+  //   } 
+  // },[sub01Data])
 
   
   if(loading) return <div>loading...</div>;
-
+  /** sub01Data에 누적하는건 확인함. category에 어떻게 동시에 반영시킬지 생각!!!*/
   console.log(sub01Data.releaseThisWeek);
   console.log(category);
   

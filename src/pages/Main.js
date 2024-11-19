@@ -28,13 +28,12 @@ const Main = () => {
       setLoading(false)
       return res;
     }
-
     fetchData().then(res => setMainData(res))
   },[])
 
+  if(loading || !mainData.visual) return <>loading...</>
   console.log(mainData);
-
-  if(loading) return <>loading...</>
+  // return
 
   return (
     <div>
@@ -89,7 +88,7 @@ const Visual = ({ visualData }) => {
                 <p>{visualData.overview}</p>     
                 <button onClick={()=>navi('/details', {state: visualData.id})}>더보기</button>
               </div>
-              <img src={ visualData.backdrop ? ('https://image.tmdb.org/t/p/original/' + visualData.backdrop) : ('https://image.tmdb.org/t/p/original/' + visualData.poster)} />
+              <img src={`https://image.tmdb.org/t/p/original/${visualData.backdrop_path}`} alt={`${visualData.title} 배경사진`} />
 
               <div className='visualSmall'>
                 <Swiper
@@ -120,65 +119,71 @@ const Visual = ({ visualData }) => {
 
 // 메인 컨텐츠
 const MainContents = ({ mainData }) => {
-  let titles = ['지금 뜨는 콘텐츠', '이번 주 새로 개봉한 영화', '가장 인기 있는 영화', '가볍게 보는 짧은 영화', 'SF 액션 영화'];
-  // const { mainData } = store();
-  let trendingPoster = [],
-      releaseThisWeekPoster = [],
-      top_rated1Poster = [],
-      twoHoursPoster = [],
-      sfActionPoster = [],
-      posterArr = [];
-
-  if(mainData.length !== 0){
-    
-    trendingPoster = (mainData.trending).map((obj) => (
-      {
-        id: obj.id,
-        poster: 'https://image.tmdb.org/t/p/w300/' + obj.poster_path
-      }
-    ))
-
-    releaseThisWeekPoster = (mainData.releaseThisWeek).map((obj) => (
-      {
-        id: obj.id,
-        poster: 'https://image.tmdb.org/t/p/w300/' + obj.poster_path
-      }
-    ))
-
-    top_rated1Poster = (mainData.top_rated1).map((obj) => (
-      {
-        id: obj.id,
-        poster: 'https://image.tmdb.org/t/p/w300/' + obj.poster_path
-      }
-    ))
-
-    twoHoursPoster = (mainData.twoHours).map((obj) => (
-      {
-        id: obj.id,
-        poster: 'https://image.tmdb.org/t/p/w300/' + obj.poster_path
-      }
-    ))
-
-    sfActionPoster = (mainData.sfAction).map((obj) => (
-      {
-        id: obj.id,
-        poster: 'https://image.tmdb.org/t/p/w300/' + obj.poster_path
-      }
-    ))
-
-    posterArr = [trendingPoster, releaseThisWeekPoster, top_rated1Poster, twoHoursPoster, sfActionPoster];
-  }
 
   return (
       <>
         <section>
-          {
-            titles.map((title, idx) => (
-              <article className={mainStyle.mainArticle} key={idx}>
-                <BasicSlide title={title} posterArr={posterArr[idx]} />
-              </article>
-            ))
-          }
+          {/* 지금 뜨는 콘텐츠 */}
+          <article className={mainStyle.mainArticle}>
+            <div className={mainStyle.titleWrap}>
+              <h2 className={mainStyle.title}>지금 뜨는 콘텐츠</h2>
+              <div className={mainStyle.viewMore}>
+                <ViewMoreBtn />
+              </div>
+            </div>
+            <div className={mainStyle.basicSlideWrap}>
+              <BasicSlide posterArr={mainData.trending} />
+            </div>
+          </article>
+          {/* 이번 주 새로 개봉한 영화 */}
+          <article className={mainStyle.mainArticle}>
+            <div className={mainStyle.titleWrap}>
+              <h2 className={mainStyle.title}>이번 주 새로 개봉한 영화</h2>
+              <div className={mainStyle.viewMore}>
+                <ViewMoreBtn />
+              </div>
+            </div>
+            <div className={mainStyle.basicSlideWrap}>
+              <BasicSlide posterArr={mainData.releaseThisWeek} />
+            </div>
+          </article>
+          {/* 가장 인기 있는 영화 */}
+          <article className={mainStyle.mainArticle}>
+            <div className={mainStyle.titleWrap}>
+              <h2 className={mainStyle.title}>가장 인기 있는 영화</h2>
+              <div className={mainStyle.viewMore}>
+                <ViewMoreBtn />
+              </div>
+            </div>
+            <div className={mainStyle.basicSlideWrap}>
+              <BasicSlide posterArr={mainData.top_rated} />
+            </div>
+          </article>
+          {/* 가볍게 보는 짧은 영화 */}
+          <article className={mainStyle.mainArticle}>
+            <div className={mainStyle.titleWrap}>
+              <h2 className={mainStyle.title}>가볍게 보는 짧은 영화</h2>
+              <div className={mainStyle.viewMore}>
+                <ViewMoreBtn />
+              </div>
+            </div>
+            <div className={mainStyle.basicSlideWrap}>
+              <BasicSlide posterArr={mainData.twoHours} />
+            </div>
+          </article>
+          {/* SF 액션 영화 */}
+          <article className={mainStyle.mainArticle}>
+            <div className={mainStyle.titleWrap}>
+              <h2 className={mainStyle.title}>SF 액션 영화</h2>
+              <div className={mainStyle.viewMore}>
+                <ViewMoreBtn />
+              </div>
+            </div>
+            <div className={mainStyle.basicSlideWrap}>
+              <BasicSlide posterArr={mainData.sfAction} />
+            </div>
+          </article>
+
         </section>
         <section className={mainStyle.email}>
           <h2>매주 새로운 영화를 발견해 보세요.</h2>
@@ -188,6 +193,14 @@ const MainContents = ({ mainData }) => {
   );
 }
 
+// 제목 옆 더보기 버튼
+const ViewMoreBtn = () => {
+  return (
+    <div className={mainStyle.viewMoreBtnWrap}>
+      <button>더보기</button>
+    </div>
+  )
+}
 
 // ==============================================
 // 비주얼-슬라이드 : Visual컴포넌트에 합쳤음

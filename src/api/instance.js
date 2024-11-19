@@ -2,8 +2,8 @@
 // https://www.npmjs.com/package/axios
 import axios from 'axios';
 // process.env.REACT_APP_SERVER_URL,
-// const api_key = 'f89a6c1f22aca3858a4ae7aef10de967'
-const api_key = process.env.REACT_APP_API_API_KEY;
+const api_key = 'f89a6c1f22aca3858a4ae7aef10de967'
+// const api_key = process.env.REACT_APP_API_API_KEY;
 const defaultParams = 
     {
         api_key, 
@@ -55,34 +55,24 @@ const chooseTwoRandomGenres = () => {
 
 let selectedGenres = chooseTwoRandomGenres();
 let keyword = '검색키워드';
-let movieId = 1022789;    
+let visualId = [1184918, 402431, 533535, 1022789, 917496, 508442, 335983];    
 
 const instance = axios.create({
-    // baseURL: 'https://api.themoviedb.org/3',
-    baseURL: process.env.REACT_APP_API_BASE_URL,
+    baseURL: 'https://api.themoviedb.org/3',
+    // baseURL: process.env.REACT_APP_API_BASE_URL,
     params: defaultParams    
 });
 
-// let visual = [
-//     '/movie/157336?append_to_response=videos',
-//     '/movie/157336?append_to_response=videos',
-//     '/movie/157336?append_to_response=videos'
-// ]
-
-let top_rated= [
-    '/movie/top_rated?sort_by=popularity.desc&page=1',
-    '/movie/top_rated?sort_by=popularity.desc&page=2',
-    '/movie/top_rated?sort_by=popularity.desc&page=3',
-    '/movie/top_rated?sort_by=popularity.desc&page=4',
-    '/movie/top_rated?sort_by=popularity.desc&page=5'
-]
-
 export async function apiMain(){
-   let [visual1,visual2,visual3, trending, releaseThisWeek, top_rated1, twoHours, sfAction] =  await Promise.all([
+   let [visual1,visual2,visual3, visual4, visual5, visual6, visual7, trending, releaseThisWeek, top_rated, twoHours, sfAction] =  await Promise.all([
         // visual1,visual2,visual3,     
-        instance.get('/movie/1022789?append_to_response=videos'),
-        instance.get('/movie/508442?append_to_response=videos'),
-        instance.get('/movie/533535?append_to_response=videos'),
+        instance.get(`/movie/${visualId[0]}?append_to_response=videos`),
+        instance.get(`/movie/${visualId[1]}?append_to_response=videos`),
+        instance.get(`/movie/${visualId[2]}?append_to_response=videos`),
+        instance.get(`/movie/${visualId[3]}?append_to_response=videos`),
+        instance.get(`/movie/${visualId[4]}?append_to_response=videos`),
+        instance.get(`/movie/${visualId[5]}?append_to_response=videos`),
+        instance.get(`/movie/${visualId[6]}?append_to_response=videos`),
         instance.get('/trending/movie/week'), 
         instance.get('/discover/movie?sort_by=popularity.desc&with_release_type=2|3|4&release_date.gte=2024-09-05&release_date.lte=2024-09-12&page=1'), 
         instance.get('/movie/top_rated?sort_by=popularity.desc&page=1'),
@@ -91,12 +81,10 @@ export async function apiMain(){
     ])
 
     return {
-        visual: [visual1.data,visual2.data,visual3.data],
-        // visual2: visual2.data,
-        // visual3: visual3.data,
+        visual: [visual1.data,visual2.data,visual3.data, visual4.data, visual5.data, visual6.data, visual7.data],
         trending: trending.data.results,
         releaseThisWeek: releaseThisWeek.data.results,
-        top_rated1: top_rated1.data.results,
+        top_rated: top_rated.data.results,
         twoHours: twoHours.data.results,
         sfAction: sfAction.data.results
       };
@@ -108,17 +96,23 @@ export async function apiSub01(page){
         instance.get(`/discover/movie?sort_by=popularity.desc&with_release_type=2|3|4&release_date.gte=2024-09-05&release_date.lte=2024-09-12&page=${page}`),
         instance.get(`movie/now_playing?page=${page}`)
     ])
-    return {releaseThisWeek, nowPlaying};
+    return {
+        releaseThisWeek: releaseThisWeek.data.results, 
+        nowPlaying: nowPlaying.data.results
+    };
 }
 
 export async function apiSub02(page){
-    let [trending, top_rated1,top_rated2,top_rated3,top_rated4,top_rated5] =  await Promise.all([
+    let [trending, top_rated] =  await Promise.all([
         instance.get(`/trending/movie/week?page=${page}`),
-        ...top_rated.map(obj => {
-            return instance.get(obj)
-        })
+        instance.get(`/movie/top_rated?sort_by=popularity.desc&page=${page}`),
+
     ])
-    return {trending, top_rated1,top_rated2,top_rated3,top_rated4,top_rated5};
+    // return {trending, top_rated};
+    return {
+        trending: trending.data.results, 
+        top_rated: top_rated.data.results
+    };
 }
 
 export async function apiSub03(page){
@@ -126,7 +120,10 @@ export async function apiSub03(page){
         instance.get(`/discover/movie?sort_by=popularity.desc&with_genres=28,878&page=${page}`),
         instance.get(`/discover/movie?sort_by=popularity.desc&with_genres=28,878&with_runtime.lte=120&page=${page}`)
     ])
-    return {genres, twoHours};
+    return {
+        genres: genres.data.results, 
+        twoHours: twoHours.data.results
+    };
 }
 
 export async function apiDetails(movieId){
@@ -136,13 +133,20 @@ export async function apiDetails(movieId){
         instance.get(`/movie/${movieId}?append_to_response=videos,casts`),
         instance.get(`/movie/${movieId}/similar`)
     ])
-    return {watchProviders, certification, info, similar};
+    return {
+        watchProviders: watchProviders.data.results.KR, 
+        certification: ( (certification.data.results).find(item => item.iso_3166_1 === 'KR') ).release_dates[0].certification,
+        info: info.data, 
+        similar:similar.data.results
+    };
 }
 
 export async function apiSearchResult(keyword, page){
     console.log(`검색어: ${keyword}`);
-    let result = await instance.get(`/discover/movie?&sort_by=populcarity.desc&with_text_query=${keyword}&page=${page}`);
-    return {result};
+    let search = await instance.get(`/discover/movie?&sort_by=populcarity.desc&with_text_query=${keyword}&page=${page}`);
+    return {
+        search: search.data.results
+    };
 }
 
 

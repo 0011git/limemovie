@@ -5,6 +5,7 @@ import BasicSlide from '../components/slide/BasicSlide'
 // import TrailerSlide from '../components/slide/TrailerSlide'
 import { apiDetails } from '../api/instance'
 import { useLocation } from 'react-router-dom'
+import store from '../store/store'
 
 // 스와이퍼
 import 'swiper/css';
@@ -14,26 +15,32 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 
 const Details = () => {
+    const { loading, setLoading } = store();
     const {state} = useLocation();  //id받기
-    const [details, setDetails] = useState({watchProviders:{}, certification:{}, info:{}, similar:{}});
+    // const [details, setDetails] = useState({watchProviders:{}, certification:{}, info:{}, similar:{}});
+    const [details, setDetails] = useState({});
 
     useEffect (() => {
         const fetchDetails = async () => {
+            console.log(state);
+            
             const result = await apiDetails(state);
-            setDetails(() => (
-                {watchProviders: result.watchProviders.data,
-                certification: (result.certification.data.results.map((kr) => (kr.iso_3166_1 === 'KR' ? kr.release_dates[0] : null))).filter((item) => item !== null),
-                info: result.info.data,
-                similar: result.similar.data}
-            ))
+            setLoading(false)
+            setDetails(result)
+                // {watchProviders: result.watchProviders.data,
+                // certification: (result.certification.data.results.map((kr) => (kr.iso_3166_1 === 'KR' ? kr.release_dates[0] : null))).filter((item) => item !== null),
+                // info: result.info.data,
+                // similar: result.similar.data}
         };
         window.scrollTo({top:0})
         fetchDetails();
       }, [state]);    
-      if(!Object.values(details.info).length) return<>Loading...</>;
+      if(loading) return<>Loading...</>;
 
       console.log(details.info);
       console.log(details.watchProviders);
+      console.log(details.certification);
+      console.log(details.similar);
   return (
     <>
         <div className={DetailScss.subDetailsWrap}>
@@ -46,7 +53,7 @@ const Details = () => {
 }
 
 const SubVisual = ({info, cer}) => {
-    if(!Object.values(info).length || !Object.values(cer).length) return<>Loading...</>;
+    if(info == {}) return<>Loading...</>;
     let genresArr = [];
     genresArr = ((info.genres).map((g) => g.name)).slice(0,2);
 
@@ -105,22 +112,18 @@ const SubVisual = ({info, cer}) => {
 
 const SubDetails = ({info, watch}) => {
     // 시청
-    const flatRef = useRef();
-    const rentRef = useRef();
-    const buyRef = useRef();
-    if(!Object.values(info).length || !Object.values(watch).length) return<>Loading...</>;
+    // if( watch.link !== '') return<>Loading...</>;
 
-    // let flatrate = watch.flatrate ? watch.flatrate : [];
-    // let rent = watch.rent ?  watch.rent : [];
-    // let buy = watch.buy ?  watch.buy : [];
-    // if(flatrate.length === 0){
-    //     flatRef.current.classList.add(DetailScss.hide);
-    // }else if(rent.length === 0){
-    //     rentRef.current.classList.add(DetailScss.hide);
-    // }else if(buy.length === 0){
-    //     buyRef.current.classList.add(DetailScss.hide);
-    // }
+    let flatrate = watch.flatrate?.length ? watch.flatrate : [];
+    let rent = watch.rent?.length ?  watch.rent : [];
+    let buy = watch.buy?.length ?  watch.buy : [];
+
+    console.log(flatrate);
+    console.log(rent);
+    console.log(buy);
     
+
+
     //장르
     let genresArr = [];
     genresArr = (info.genres).map((g) => g.name)
@@ -139,12 +142,13 @@ const SubDetails = ({info, watch}) => {
     return (
         <section className={DetailScss.subDetails}>
             {/* 시청 */}
-            {/* <article style={trailersArr.length === 0 ? {display:'none'} : {} } className={DetailScss.watch}>
+            <article style={trailersArr.length === 0 ? {display:'none'} : {} } className={DetailScss.watch}>
                 <h3>
                     시청
                 </h3>
                 <ul className={DetailScss.platforms}>
-                    <li ref={flatRef}>
+                    { flatrate.length != 0 ? 
+                    <li>
                         <h4>스트리밍</h4>
                         <ul>
                             {
@@ -152,7 +156,7 @@ const SubDetails = ({info, watch}) => {
                                     <li>
                                         <a href={watch.link} target='_blank'>
                                             <div className={DetailScss.logoWrap}>
-                                                <img className={DetailScss.logo} src={'https://image.tmdb.org/t/p/w500/' + platform.logo_path} />
+                                                <img className={DetailScss.logo} src={`https://image.tmdb.org/t/p/w500/${platform.logo_path}`} />
                                             </div>
                                         </a>
                                     </li>
@@ -160,8 +164,11 @@ const SubDetails = ({info, watch}) => {
                             }
                             <li><a href="#" className={DetailScss.netflix}></a></li>
                         </ul>
-                    </li>
-                    <li ref={rentRef}>
+                    </li> : <li style={{display:'none'}}></li>
+                    }
+
+                    { rent.length != 0 ?
+                    <li>
                         <h4>대여</h4>
                         <ul>
                             {
@@ -169,15 +176,18 @@ const SubDetails = ({info, watch}) => {
                                     <li>
                                         <a href={watch.link} target='_blank'>
                                             <div className={DetailScss.logoWrap}>
-                                                <img className={DetailScss.logo} src={'https://image.tmdb.org/t/p/w500/' + platform.logo_path} />
+                                                <img className={DetailScss.logo} src={`https://image.tmdb.org/t/p/w500/${platform.logo_path}`} />
                                             </div>
                                         </a>
                                     </li>
                                 ))
                             }
                         </ul>
-                    </li>
-                    <li ref={buyRef}>
+                    </li> : <li style={{display:'none'}}></li>
+                    }
+
+                    { buy.length != 0 ?
+                    <li>
                         <h4>구매</h4>
                         <ul>
                             {
@@ -185,16 +195,17 @@ const SubDetails = ({info, watch}) => {
                                     <li>
                                         <a href={watch.link} target='_blank'>
                                             <div className={DetailScss.logoWrap}>
-                                                <img className={DetailScss.logo} src={'https://image.tmdb.org/t/p/w500/' + platform.logo_path} />
+                                                <img className={DetailScss.logo} src={`https://image.tmdb.org/t/p/w500/${platform.logo_path}`} />
                                             </div>
                                         </a>
                                     </li>
                                 ))
                             }
                         </ul>
-                    </li>
+                    </li> : <li style={{display:'none'}}></li>
+                    }
                 </ul>
-            </article> */}
+            </article>
 
             {/* 개요 */}
             <article className={DetailScss.info}>
@@ -251,18 +262,18 @@ const SubDetails = ({info, watch}) => {
 }
 
 const SubSimilar = ({similar}) => {
-    let posterArr =[];
-    posterArr = (similar.results).map((obj) => (
-        {
-            id: obj.id,
-            poster: `https://image.tmdb.org/t/p/w300/${obj.poster_path}`
-        }
-    ))
+    // let posterArr =[];
+    // posterArr = (similar).map((obj) => (
+    //     {
+    //         id: obj.id,
+    //         poster: `https://image.tmdb.org/t/p/w300/${obj.poster_path}`
+    //     }
+    // ))
     
     return (
         <section className={DetailScss.subSimilar}>
             <article>
-                <BasicSlide title={'유사한 콘텐츠'} posterArr={posterArr}/>
+                <BasicSlide title={'유사한 콘텐츠'} posterArr={similar}/>
             </article>
         </section>
     )
