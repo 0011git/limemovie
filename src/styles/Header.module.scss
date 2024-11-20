@@ -19,6 +19,16 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        .logo{
+            cursor: pointer;
+            position: relative;
+            .forScreenReader{
+                font-size: 1px;
+                position: absolute;
+                top: 0;
+                left: -100%;
+            }
+        }
        .navWrap{
            width: 70%;
            display: flex;
@@ -28,14 +38,18 @@
                width: 45%;
                margin-right: 24px;
                text-align: right;
-               a{
-                   padding: 4px;
-                   font-size: 20px;
-                   &:not(:last-of-type){
-                       margin-right: 24px;
+               .categoryGroup{
+                display: flex;
+                   .categoryCommon{
+                       padding: 4px;
+                       font-size: 20px;
+                       color: #fafafa;
+                       font-weight: 700;
+                       cursor: pointer;
+                       &:not(:last-of-type){
+                           margin-right: 24px;
+                       }
                    }
-                   color: #fafafa;
-                   font-weight: 700;
                }
            }
            
@@ -49,7 +63,7 @@
     position: relative;
     .search{
         width: 100%;
-        min-width: 360px;
+        // min-width: 360px;
         position: relative;
         input{
             width: 100%;
@@ -81,7 +95,7 @@
             background: url('../assets.img/reset.svg') center no-repeat;
             background-size: contain;
         }
-        &.activeSearch{
+        &.active{
             input{
                 color: #E3FF00;
             }
@@ -92,5 +106,6 @@
                 display: block;
             }
         }
+        
     }
 }

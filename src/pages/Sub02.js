@@ -1,30 +1,44 @@
 import React, { useEffect, useState } from 'react'
 import subStyle from '../styles/sub.module.scss'
-import SubBtnWrap from '../components/sub/SubBtnWrap'
 import SubImgWrap from '../components/sub/SubImgWrap'
 import LoadMoreBtn from '../components/sub/LoadMoreBtn'
 import store from '../store/store'
 import GenreBtn from '../components/GenreBtn'
+import { apiSub02 } from '../api/instance'
+import Loading from '../components/Loading'
 
 const Sub02 = () => {
-  let btnNameArr = ['지금 뜨는 콘텐츠', 'TOP 100'];
-  const { sub02Data, loading, apiSub02 } = store();
+  let btnNameArr = ['지금 뜨는 콘텐츠', '가장 인기 있는 영화'];
+  const { loading, setLoading } = store();
+
+  // 데이터 저장용
+  const [trending, setTrending] = useState([]);
+  const [topRated, setTopRated] = useState([]);
+  // 페이지++
   const [page, setPage] = useState(1);
 
+  // btnNameArr버튼들 온오프용 변수들
   const initialArr = Array(btnNameArr.length).fill(false);
   const [isActive, setIsActive] = useState(initialArr);
-  const [category, setCategory] = useState([]);
+    // 선택한 버튼의 인덱스(기본값0)
+  const [category, setCategory] = useState(0);
 
   useEffect(() => {
-    apiSub02(page);
+    const fetchData = async() => {
+      const res = await apiSub02(page);
+      setLoading(false)
+      return res;
+    }
+    isActive[category] = true;
+    fetchData().then(res => {
+      setTrending( prev => ([...prev, ...res.trending]) )
+      setTopRated( prev => ([...prev, ...res.topRated]) )
+    }) 
   }, [page])
-  if(loading) return <>loading...</>
 
-  let trending = sub02Data.trending;
-  const topRated100 = sub02Data.top_rated1.data.results.concat(sub02Data.top_rated2.data.results, sub02Data.top_rated3.data.results, sub02Data.top_rated4.data.results, sub02Data.top_rated5.data.results)
-
-  const categoryArr = [trending, topRated100]
+  if(loading) return <Loading />;
   
+
   const chooseGenres = (e) => {
     let state = [...isActive]
     const selectedGenres = e.target.innerText
@@ -36,15 +50,14 @@ const Sub02 = () => {
         state[selectedIdx] = true;
         setIsActive(state);
         // 해당 콘텐츠 활성화
-        setCategory([...categoryArr[selectedIdx]]);
+        setCategory(selectedIdx);
     }
   }
 
 
   return (
-    <div className={subStyle.sub01}>
-      <section>
-      <h2 className={subStyle.title}>인기</h2>
+    <section className={subStyle.subWrap}>
+      <h2 h2 className={subStyle.title}>인기</h2>
 
       <ul className={subStyle.tabWrap}>
           {btnNameArr.map((name, idx) => (
@@ -54,10 +67,13 @@ const Sub02 = () => {
           ))}
       </ul>
 
-      <SubImgWrap imgArr={category} />
+      { 
+        category === 0  ?
+        <SubImgWrap imgArr={trending} />
+        : <SubImgWrap imgArr={topRated} />
+      }
       <LoadMoreBtn page={page} setPage={setPage} />
-      </section>
-    </div>
+    </section>
   )
 }
 

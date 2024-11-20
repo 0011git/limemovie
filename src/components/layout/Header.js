@@ -1,11 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { HashRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import headerStyle from '../../styles/header.module.scss';
-
 
 const Header = () => {
   const [down, setDown] = useState(false);
   let prevY = useRef(0);
+  const navigate = useNavigate();
+
+  const goToPage = (path) => {
+    navigate(path)
+  }
 
   const onScroll = () => {
     let newY = window.scrollY;
@@ -31,14 +35,16 @@ const Header = () => {
     return (
       <header className={`${headerStyle.header} ${down ? headerStyle.hide : ''}`}>
         <div className={headerStyle.inner}>
-          <Link to='/'>
-            <h1 className='logo'></h1>
-          </Link>
+          <h1 onClick={() => goToPage('/')} className={`logo ${headerStyle.logo}`} aria-label="라임무비 사이트 로고">
+            <span className={headerStyle.forScreenReader}>라임무비 LimeMovie</span>
+          </h1>
           <div className={headerStyle.navWrap}>
             <nav>
-              <Link to="/nowplaying">최신</Link>
-              <Link to="/popular">인기</Link>
-              <Link to="/genres">장르</Link>
+              <ul className={headerStyle.categoryGroup}>
+                <li className={headerStyle.categoryCommon} onClick={() => goToPage('/nowplaying')}>최신</li>
+                <li className={headerStyle.categoryCommon} onClick={() => goToPage('/popular')}>인기</li>
+                <li className={headerStyle.categoryCommon} onClick={() => goToPage('/genres')}>장르</li>
+              </ul>
             </nav>
             <Search />
           </div>
@@ -51,35 +57,33 @@ const Header = () => {
 // 검색 박스
 const Search = () => {
   const [keyword, setKeyword] = useState('');
-  const searchRef = useRef();
-
+  const [active, setActive] = useState(false);
+  const navigate = useNavigate();
   
-  const onSearch = (e) => {
+  const insertKeyword = (e) => {
       setKeyword(e.target.value);
-      if(keyword !== ''){
-        searchRef.current.classList.add(headerStyle.activeSearch);
-      }else{
-        searchRef.current.classList.remove(headerStyle.activeSearch);
-      }
+      setActive(true);
   }
 
-  const onReset = () => {
+  const onReset = (e) => {
+    e.preventDefault();
     setKeyword(''); 
-    searchRef.current.classList.remove(headerStyle.activeSearch); 
+    setActive(false);
   }
 
-  const searchKeyword = () => {
-    
+  const onSearch = (e) => {
+    e.preventDefault();
+    navigate(`/search?keyword=${keyword}`);    
   }
 
 
   return (
-    <form onSubmit={searchKeyword}>
+    <form onSubmit={onSearch}>
     <div className={headerStyle.searchWrap}>
-      <div ref={searchRef} className={headerStyle.search}>
-        <input value={keyword} id='search' onChange={onSearch} type='text' placeholder='검색...' />
+      <div className={`${headerStyle.search} ${active ? headerStyle.active : ''}`}>
+        <input value={keyword} id='search' onChange={(e) => insertKeyword(e)} type='text' placeholder='검색...' />
         <label htmlFor='search'></label>
-        <button onClick={onReset} className={headerStyle.reset}></button>
+        <button type="button" onClick={onReset} className={headerStyle.reset}></button>
       </div>
     </div>
     </form>

@@ -3,6 +3,9 @@
 body{
   background-color: $black;
 }
+main{
+  min-height: 100vh;
+}
 section{
   max-width: 1200px;
   margin: 0 auto;

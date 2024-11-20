@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import DetailScss from '../styles/Details.module.scss'
+import detailStyle from '../styles/details.module.scss'
 import BasicSlide from '../components/slide/BasicSlide'
 // import CastSlide from '../components/slide/CastSlide'
 // import TrailerSlide from '../components/slide/TrailerSlide'
@@ -13,6 +13,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
+import Loading from '../components/Loading'
 
 const Details = () => {
     const { loading, setLoading } = store();
@@ -22,28 +23,20 @@ const Details = () => {
 
     useEffect (() => {
         const fetchDetails = async () => {
-            console.log(state);
-            
             const result = await apiDetails(state);
-            setLoading(false)
             setDetails(result)
-                // {watchProviders: result.watchProviders.data,
-                // certification: (result.certification.data.results.map((kr) => (kr.iso_3166_1 === 'KR' ? kr.release_dates[0] : null))).filter((item) => item !== null),
-                // info: result.info.data,
-                // similar: result.similar.data}
-        };
-        window.scrollTo({top:0})
+            setLoading(false)
+            window.scrollTo({top:0})
+        };        
         fetchDetails();
-      }, [state]);    
-      if(loading) return<>Loading...</>;
+    }, [state]);
 
-      console.log(details.info);
-      console.log(details.watchProviders);
-      console.log(details.certification);
-      console.log(details.similar);
+    if(loading) return <Loading />;
+
+
   return (
     <>
-        <div className={DetailScss.subDetailsWrap}>
+        <div className={detailStyle.subDetailsWrap}>
             <SubVisual info={details.info} cer={details.certification} />
             <SubDetails info={details.info} watch={details.watchProviders} />
             <SubSimilar similar={details.similar} />
@@ -53,18 +46,11 @@ const Details = () => {
 }
 
 const SubVisual = ({info, cer}) => {
-    if(info == {}) return<>Loading...</>;
-    let genresArr = [];
-    genresArr = ((info.genres).map((g) => g.name)).slice(0,2);
+    // if(info == undefined) return <Loading />;
+    // if(info?.genres?.length === 0) return<>Loading...</>;
 
-    let castsArr = [];
-    castsArr = [
-        (info.casts.cast)[0].name,
-        (info.casts.cast)[1].name];
-
-    let ageRating = cer[0].certification;
     let ageRatingKR =''
-    switch(ageRating){
+    switch(cer){
         case 'ALL':
             ageRatingKR = '전체연령가';
             break;
@@ -80,43 +66,54 @@ const SubVisual = ({info, cer}) => {
         case 'Restricted Screening':
             ageRatingKR = '제한상영가';
             break;
+        default:
+            ageRatingKR = '-';
+            break;
     }
 
-    return (
-        <section className={DetailScss.subVisual}>
-            <div className={DetailScss.overview}>
+    return !info ? (<section></section>) :
+        (<section className={detailStyle.subVisual}>
+            <div className={detailStyle.overview}>
                 <h3>{info.title}</h3>
-                <ul className={DetailScss.listWrap}>
-                    <li className={DetailScss.shortInfo}>
+                <ul className={detailStyle.listWrap}>
+                    <li className={detailStyle.shortInfo}>
                         <ul>
-                            <li>{genresArr.join(', ')}</li>
+                            <li>{(info.genres.slice(0,2)).map((obj)=>(<span className={detailStyle.twoGenres} key={`${info.id}_${obj.id}`}>{obj.name}</span>))}</li>
                             <li>{(info.release_date).slice(0,4)}</li>
                             <li>{info.vote_average.toFixed(2)}점</li>
                             <li>{ageRatingKR}</li>
                         </ul>
                     </li>
-                    <li className={DetailScss.shortSummary}>{info.overview}</li>
-                    <li className={DetailScss.shortCast}>
+                    <li className={detailStyle.shortSummary}>{info.overview}</li>
+                    <li className={detailStyle.shortCast}>
                         <h4>주연</h4>
-                        <p>{castsArr.join(', ')} 외</p>
+                        <p>{(info.casts.cast.slice(0,2)).map((obj) => (<span className={detailStyle.twoCasts} key={`${obj.original_name}_${obj.id}`}>{obj.name}</span>) )} 외</p>
                     </li>
                 </ul>
             </div>
-            <div className={DetailScss.imgWrap}>
-                <img src={info.backdrop_path ? `https://image.tmdb.org/t/p/original/${info.backdrop_path}` : `https://image.tmdb.org/t/p/original/${info.poster_path}`}/>
+            <div className={detailStyle.imgWrap}>
+                <img src={info.backdrop_path ? `https://image.tmdb.org/t/p/original/${info.backdrop_path}` : `https://image.tmdb.org/t/p/original/${info.poster_path}`} alt={`${info.title} 이미지`} />
             </div>
 
-        </section>
-    )
+        </section>)
+  
 }
 
 const SubDetails = ({info, watch}) => {
-    // 시청
+    if( info === undefined ) return <Loading />;
     // if( watch.link !== '') return<>Loading...</>;
 
-    let flatrate = watch.flatrate?.length ? watch.flatrate : [];
-    let rent = watch.rent?.length ?  watch.rent : [];
-    let buy = watch.buy?.length ?  watch.buy : [];
+    let flatrate = [];
+    let rent = [];
+    let buy = [];
+    // 시청
+    console.log(info);
+    console.log(watch);
+    if(watch !== undefined){
+        flatrate = watch.flatrate?.length ? watch.flatrate : [];
+        rent = watch.rent?.length ?  watch.rent : [];
+        buy = watch.buy?.length ?  watch.buy : [];
+    }
 
     console.log(flatrate);
     console.log(rent);
@@ -125,58 +122,48 @@ const SubDetails = ({info, watch}) => {
 
 
     //장르
-    let genresArr = [];
-    genresArr = (info.genres).map((g) => g.name)
-
-    //캐스트
-    let castsArr = (info.casts.cast).slice(0, 15);
-
-    //트레일러
-    let trailersArr = [];
-    trailersArr = (info.videos.results).slice(0,5);
-
-
-    
+    // let genresArr = [];
+    // genresArr = (info.genres).map((g) => g.name)
+  
 
 
     return (
-        <section className={DetailScss.subDetails}>
+        <section className={detailStyle.subDetails}>
             {/* 시청 */}
-            <article style={trailersArr.length === 0 ? {display:'none'} : {} } className={DetailScss.watch}>
+            <article style={watch === undefined ? {display:'none'} : {} } className={detailStyle.watch}>
                 <h3>
                     시청
                 </h3>
-                <ul className={DetailScss.platforms}>
-                    { flatrate.length != 0 ? 
+                <ul className={detailStyle.platforms}>
+                    { flatrate.length !== 0 ? 
                     <li>
                         <h4>스트리밍</h4>
                         <ul>
                             {
                                 flatrate.map((platform) => (
-                                    <li>
-                                        <a href={watch.link} target='_blank'>
-                                            <div className={DetailScss.logoWrap}>
-                                                <img className={DetailScss.logo} src={`https://image.tmdb.org/t/p/w500/${platform.logo_path}`} />
+                                    <li key={`${platform.provider_id}_flatrate`}>
+                                        <a href={watch.link} target='_blank' rel="noopener noreferrer">
+                                            <div className={detailStyle.logoWrap}>
+                                                <img className={detailStyle.logo} src={`https://image.tmdb.org/t/p/w500/${platform.logo_path}`} alt={`${platform.provider_name} logo`} />
                                             </div>
                                         </a>
                                     </li>
                                 ))
                             }
-                            <li><a href="#" className={DetailScss.netflix}></a></li>
                         </ul>
                     </li> : <li style={{display:'none'}}></li>
                     }
 
-                    { rent.length != 0 ?
+                    { rent.length !== 0 ?
                     <li>
                         <h4>대여</h4>
                         <ul>
                             {
                                 rent.map((platform) => (
-                                    <li>
-                                        <a href={watch.link} target='_blank'>
-                                            <div className={DetailScss.logoWrap}>
-                                                <img className={DetailScss.logo} src={`https://image.tmdb.org/t/p/w500/${platform.logo_path}`} />
+                                    <li key={`${platform.provider_id}_rent`}>
+                                        <a href={watch.link} target='_blank' rel="noopener noreferrer">
+                                            <div className={detailStyle.logoWrap}>
+                                                <img className={detailStyle.logo} src={`https://image.tmdb.org/t/p/w500/${platform.logo_path}`} alt={`${platform.provider_name} logo`} />
                                             </div>
                                         </a>
                                     </li>
@@ -186,16 +173,16 @@ const SubDetails = ({info, watch}) => {
                     </li> : <li style={{display:'none'}}></li>
                     }
 
-                    { buy.length != 0 ?
+                    { buy.length !== 0 ?
                     <li>
                         <h4>구매</h4>
                         <ul>
                             {
                                 buy.map((platform) => (
-                                    <li>
-                                        <a href={watch.link} target='_blank'>
-                                            <div className={DetailScss.logoWrap}>
-                                                <img className={DetailScss.logo} src={`https://image.tmdb.org/t/p/w500/${platform.logo_path}`} />
+                                    <li key={`${platform.provider_id}_buy`}>
+                                        <a href={watch.link} target='_blank' rel="noopener noreferrer">
+                                            <div className={detailStyle.logoWrap}>
+                                                <img className={detailStyle.logo} src={`https://image.tmdb.org/t/p/w500/${platform.logo_path}`} alt={`${platform.provider_name} logo`} />
                                             </div>
                                         </a>
                                     </li>
@@ -208,14 +195,20 @@ const SubDetails = ({info, watch}) => {
             </article>
 
             {/* 개요 */}
-            <article className={DetailScss.info}>
+            <article className={detailStyle.info}>
                 <h3>
                     개요
                 </h3>
                 <ul>
                     <li>
                         <h4>장르</h4>
-                        <p>{genresArr.join(', ')}</p>
+                        <p>
+                        {
+                            info.genres.map((obj) => (
+                                <span className={detailStyle.infoGenres} key={`${info.id}_${obj.name}`}>{obj.name}</span>
+                            ))
+                        }
+                        </p>
                     </li>
                     <li>
                         <h4>시간</h4>
@@ -233,7 +226,7 @@ const SubDetails = ({info, watch}) => {
             </article>
 
             {/* 줄거리 */}
-            <article className={DetailScss.summary}>
+            <article className={detailStyle.summary}>
                 <h3>
                     줄거리
                 </h3>
@@ -243,19 +236,19 @@ const SubDetails = ({info, watch}) => {
             </article>
 
             {/* 출연 */}
-            <article className={DetailScss.casts}>
+            <article className={detailStyle.casts}>
                 <h3>
                     출연
                 </h3>
-                <CastSlide castsArr={castsArr} />
+                <CastSlide castsArr={(info.casts.cast).slice(0, 15)} />
             </article>
 
             {/* 트레일러 */}
-            <article style={trailersArr.length === 0 ? {display:'none'} : {} } className={DetailScss.trailers}>
+            <article style={info.videos.results.length === 0 ? {display:'none'} : {} } className={detailStyle.trailers}>
                 <h3>
                     트레일러
                 </h3>
-                <TrailerSlide trailersArr={trailersArr} />
+                <TrailerSlide trailersArr={info.videos.results} />
             </article>
         </section>
     )
@@ -271,9 +264,12 @@ const SubSimilar = ({similar}) => {
     // ))
     
     return (
-        <section className={DetailScss.subSimilar}>
+        <section className={detailStyle.subSimilar}>
             <article>
-                <BasicSlide title={'유사한 콘텐츠'} posterArr={similar}/>
+                <h3>
+                    유사한 콘텐츠
+                </h3>
+                <BasicSlide posterArr={similar}/>
             </article>
         </section>
     )
@@ -306,6 +302,7 @@ const CastSlide = ({castsArr}) => {
 }
 
 const TrailerSlide = ({trailersArr}) => {
+    console.log(trailersArr);
     return (
       <Swiper
           className='trailerSlide'
@@ -318,7 +315,7 @@ const TrailerSlide = ({trailersArr}) => {
         {trailersArr.map((video) => (
           <SwiperSlide key={video.key}>
             <div>
-              <iframe allowFullScreen className='youtube' src={'https://www.youtube.com/embed/' + video.key}></iframe>
+              <iframe allowFullScreen className='youtube' src={'https://www.youtube.com/embed/' + video.key} title={video.name}></iframe>
             </div>
           </SwiperSlide>
         ))}

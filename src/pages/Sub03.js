@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import subStyle from '../styles/sub.module.scss'
-import LoadMoreBtn from '../components/sub/LoadMoreBtn'
-import SubBtnWrap from '../components/sub/SubBtnWrap'
 import SubImgWrap from '../components/sub/SubImgWrap'
-
+import LoadMoreBtn from '../components/sub/LoadMoreBtn'
 import store from '../store/store'
 import GenreBtn from '../components/GenreBtn'
+import { apiSub03 } from '../api/instance'
+import Loading from '../components/Loading'
 
 const Sub03 = () => {
-  const title = '장르'
-  const { sub03Data, loading, apiSub03 } = store();
-  const genres = [
+  const genresArr = [
     {"id": 12, "name": "모험"},
     {"id": 14,"name": "판타지"},
     {"id": 16, "name": "애니메이션"},
@@ -36,63 +34,83 @@ const Sub03 = () => {
     
     {"id": 999999, "name": "2시간 이하 짧은 영화"}
   ]
-  const [page, setPage] = useState(1);
-  const btnNameArr = genres.map((obj) => obj.name);
+  const btnNameArr = genresArr.map((obj) => obj.name);
+  const { loading, setLoading } = store();
 
+  // 데이터 저장용
+  const [genres, setGenres] = useState([]);
+  const [twoHours, setTwoHours] = useState([]);
+  // 페이지++
+  const [page, setPage] = useState(1);
+
+  // btnNameArr버튼들 온오프용 변수들
   const initialArr = Array(btnNameArr.length).fill(false);
   const [isActive, setIsActive] = useState(initialArr);
-  const [category, setCategory] = useState([]);
+    // 선택한 버튼의 인덱스(기본값0)
+  const [category, setCategory] = useState(0);
+
+  // 장르 여러 개 선택하게?
+  // const genresQueryFormat = () => {
+  //   const genresIdArr = category.map((item) => (
+  //     genresArr[item].id
+  //   ))
+  //   return genresIdArr.join(',')
+  // }
 
   useEffect(() => {
-    apiSub03(page);
-  }, [page])
-  if(loading) return <>loading...</>
+    const fetchData = async() => {
+      const res = await apiSub03(genresArr[category].id, page);
+      setLoading(false)
+      return res;
+    }
+    isActive[category] = true;
+    fetchData().then(res => {
+      setGenres( prev => ([...prev, ...res.genres]) )
+      setTwoHours( prev => ([...prev, ...res.twoHours]) )
+    }) 
+  }, [page, category])
 
-  // console.log(sub03Data);
-  // console.log(sub03Data.genres.data.results);
-  // console.log(sub03Data.twoHours.data.results);
-  let genresArr = sub03Data.genres.data.results
-  let twoHoursArr = sub03Data.twoHours.data.results
+  if(loading) return <Loading />;
 
-  
 
-  
-  const categoryArr = btnNameArr;
-
-  
   const chooseGenres = (e) => {
     let state = [...isActive]
     const selectedGenres = e.target.innerText
     const selectedIdx = btnNameArr.indexOf(selectedGenres)
-    
+    setGenres(() => []);  //데이터 저장소 비우기
+
     if (selectedIdx !== -1) {
         // 해당 버튼 활성화
-        // state = state.map((item) => item = false)
-        state[selectedIdx] = !state[selectedIdx];
+        state = state.map((item) => item = false)
+        state[selectedIdx] = true;
+        // state[selectedIdx] = !state[selectedIdx];
         setIsActive(state);
         // 해당 콘텐츠 활성화
-        setCategory([...categoryArr[selectedIdx]]);
+        // setCategory((prev) => (prev.includes(selectedIdx) ? prev : [...prev, selectedIdx]) );
+        setCategory(selectedIdx);
     }
   }
 
   
   return (
-    <div>
-      <section>
-        <h2 className={subStyle.title}>장르</h2>
-        
-        <ul className={subStyle.tabWrap}>
-            {btnNameArr.map((name, idx) => (
-              <li onClick={chooseGenres} key={name} style={{margin:'0 12px 12px 0'}}>
-                  <GenreBtn name={name} isActive={isActive[idx]} />
-              </li>
-            ))}
-        </ul>
+    <section className={subStyle.subWrap}>
+      <h2 className={subStyle.title}>장르</h2>
+      
+      <ul className={subStyle.tabWrap}>
+          {btnNameArr.map((name, idx) => (
+            <li onClick={chooseGenres} key={name} style={{margin:'0 12px 12px 0'}}>
+                <GenreBtn name={name} isActive={isActive[idx]} />
+            </li>
+          ))}
+      </ul>
 
-        <SubImgWrap imgArr={twoHoursArr} />
-        <LoadMoreBtn page={page} setPage={setPage} />
-      </section>
-    </div>
+      { 
+        category === 19  ?
+        <SubImgWrap imgArr={twoHours} />
+        : <SubImgWrap imgArr={genres} />
+      }
+      <LoadMoreBtn page={page} setPage={setPage} />
+    </section>
   )
 }
 

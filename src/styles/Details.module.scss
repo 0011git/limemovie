@@ -38,6 +38,12 @@
                             &:last-of-type::after{
                                 content: '';
                             }
+                            .twoGenres{
+                                color: #fafafa;
+                                &:not(:last-of-type)::after {
+                                    content: ', ';
+                                }
+                            }
                         }
                     }
                 }
@@ -57,6 +63,13 @@
                     }
                     p{
                         color: #fafafa;
+                        .twoCasts{
+                            color: #fafafa;
+                            &:not(:last-of-type)::after {
+                                content: ', ';
+                            }
+                            
+                        }
                     }
                 }
 
@@ -156,9 +169,16 @@
             h3{}
             ul{
                 li{
+                    margin-bottom: 24px;
                     h4{}
                     p{
                         width: 200px;
+                        .infoGenres{
+                            color: #fafafa;
+                            &:not(:last-of-type)::after {
+                                content: ', ';
+                            }
+                        }
                     }
                 }
             }

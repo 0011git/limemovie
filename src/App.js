@@ -9,7 +9,7 @@ import Sub01 from './pages/Sub01'
 import Sub02 from './pages/Sub02'
 import Sub03 from './pages/Sub03'
 import Details from './pages/Details';
-import SearchResult from './pages/SearchResult';
+import Search from './pages/Search';
 
 const App = () => {
   return (
@@ -21,7 +21,7 @@ const App = () => {
           <Route path="/popular" element={<Sub02 />}/>
           <Route path="/genres" element={<Sub03 />}/>
           <Route path="/details" element={<Details />}/>
-          <Route path="/search" element={<SearchResult />}/>
+          <Route path="/search" element={<Search />}/>
         </Routes>      
       </Layout>
     </Router>

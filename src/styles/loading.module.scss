@@ -1,0 +1,59 @@
+/* HTML: <div class="loader"></div> */
+.loaderWrap{
+  width: 100%;
+  height: 100vh;
+  background-color: rgba($color: #000000, $alpha: 0.3);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  .loader {
+      width: 35px;
+      height: 80px;
+      position: relative;
+      z-index: 999999;
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        padding: 3px 5px;
+        border-top: 1px solid #ffffff;
+        border-bottom: 4px solid #ffffff;
+        background: 
+          linear-gradient(#e3ff00 0 0) bottom no-repeat content-box, 
+          #ffffff;
+        mix-blend-mode: darken;
+        animation: l1 2s infinite linear;
+      }
+      &::before {
+        content: "";
+        position: absolute;
+        inset: -18px calc(50% - 2px) 8px;
+        background: #eb6b3e;   
+        transform-origin: bottom;
+        transform: rotate(8deg);
+      }
+  }
+  .text{
+    margin-top: 8px;
+    font-size: 18px;
+    color: #e3ff00;
+    // &::before,
+    &::after{
+      width: 16px;
+      height: 16px;
+      display: inline-block;
+      background: url('../assets.img/lime.svg') center no-repeat;
+      content: '';
+    }
+  }
+}
+
+@keyframes l1 {
+  0%   {background-size: 100% 100%}
+  100% {background-size: 100% 5%}
+}

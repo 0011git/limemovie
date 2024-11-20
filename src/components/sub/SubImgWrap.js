@@ -1,11 +1,11 @@
 import React from 'react'
-import subImgWrap from '../../styles/SubImgWrap.module.scss'
+import subImgWrapStyle from '../../styles/subImgWrap.module.scss'
 import { useNavigate } from 'react-router-dom';
 
 const SubImgWrap = ({imgArr}) => {
   const navi = useNavigate();
   return (
-    <div className={subImgWrap.subImgWrap}>
+    <div className={subImgWrapStyle.subImgWrap}>
           <ul>
             {imgArr.map((movie) => (
                 <li key={movie.id} onClick={() => navi('/details', {state: movie.id})}>

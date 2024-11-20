@@ -1,22 +1,27 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import subStyle from '../styles/sub.module.scss'
-import SubBtnWrap from '../components/sub/SubBtnWrap'
 import SubImgWrap from '../components/sub/SubImgWrap'
 import LoadMoreBtn from '../components/sub/LoadMoreBtn'
 import store from '../store/store'
 import GenreBtn from '../components/GenreBtn'
 import { apiSub01 } from '../api/instance'
+import Loading from '../components/Loading'
 
 const Sub01 = () => {
   const btnNameArr = ['이번 주에 개봉한 영화', '영화관에서 지금 상영 중인 영화'];
   const { loading, setLoading } = store();
-  const [sub01Data, setSub01Data] = useState({ releaseThisWeek: [], nowPlaying: [] });
+
+  // 데이터 저장용
+  const [releaseThisWeekData, setReleaseThisWeekData] = useState([]);
+  const [nowPlayingData, setNowPlayingData] = useState([]);
+  // 페이지++
   const [page, setPage] = useState(1);
 
+  // btnNameArr버튼들 온오프용 변수들
   const initialArr = Array(btnNameArr.length).fill(false);
   const [isActive, setIsActive] = useState(initialArr);
-  const [category, setCategory] = useState([]);
-  const btn = useRef(null);
+  // 선택한 버튼의 인덱스(기본값0)
+  const [category, setCategory] = useState(0);
 
   useEffect(() => {
     const fetchData = async() => {
@@ -24,51 +29,34 @@ const Sub01 = () => {
       setLoading(false)
       return res;
     }
-    fetchData().then(res => { 
-      setSub01Data( prevData => ({
-      ...prevData,
-      releaseThisWeek: [...prevData.releaseThisWeek, ...res.releaseThisWeek],
-      nowPlaying: [...prevData.nowPlaying, ...res.nowPlaying]
-    }) );
-  }
-    )
-  }, [page])
-
-  // useEffect(()=>{
-  //   console.log('sdfsdfsfsfd===================')
-  //   if(btn.current) {
-  //     btn.current.querySelector('li').click();
-  //   } 
-  // },[sub01Data])
+    isActive[category] = true;
+    fetchData().then(res => {
+      setReleaseThisWeekData( prev => ([...prev, ...res.releaseThisWeek]) )
+      setNowPlayingData( prev => ([...prev, ...res.nowPlaying]) )
+    }) 
+  }, [page]);
 
   
-  if(loading) return <div>loading...</div>;
-  /** sub01Data에 누적하는건 확인함. category에 어떻게 동시에 반영시킬지 생각!!!*/
-  console.log(sub01Data.releaseThisWeek);
-  console.log(category);
+  if(loading) return <Loading />;
   
-  const chooseGenres = (e) => {
-    
-    let categoryArr = [sub01Data.releaseThisWeek, sub01Data.nowPlaying]
-
+  const chooseGenres = (e) => {    
     let state = [...isActive]
     const selectedGenres = e.target.innerText
     const selectedIdx = btnNameArr.indexOf(selectedGenres)
     
     if (selectedIdx !== -1) {
         // 해당 버튼 활성화
-        state = state.map((item) => item = false)
-        state[selectedIdx] = true;
+        state = state.map((item) => item = false) // 모든 버튼 비활성화
+        state[selectedIdx] = true;  // 클릭한 버튼 인덱스만 활성화
         setIsActive(state);
 
-        // 해당 콘텐츠 활성화
-        setCategory([...categoryArr[selectedIdx]]);
+        setCategory(selectedIdx)
     }
   }
 
  
   return (
-    <section ref={btn} className={subStyle.subWrap}>
+    <section className={subStyle.subWrap}>
       <h2 className={subStyle.title}>최신 콘텐츠</h2>
       
       <ul className={subStyle.tabWrap}>
@@ -81,7 +69,11 @@ const Sub01 = () => {
         }
       </ul>
       
-      <SubImgWrap imgArr={category} />
+      { 
+        category === 0  ?
+        <SubImgWrap imgArr={releaseThisWeekData} />
+        : <SubImgWrap imgArr={nowPlayingData} />
+      }
       <LoadMoreBtn page={page} setPage={setPage} />
     </section>
   )

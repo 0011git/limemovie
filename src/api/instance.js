@@ -14,47 +14,47 @@ const defaultParams =
 let today = new Date();   //월은 0부터 시작
 let aWeekAgo = new Date(today);
 aWeekAgo.setDate(today.getDate() - 7);
-const dateFormat = (date) => {
-    let YYYY = date.getFullYear()
-    let MM = (date.getMonth()+1) < 10 ? '0'+ (date.getMonth()+1) : (date.getMonth()+1);
-    let DD = (date.getDate()+1) < 10 ? '0'+ (date.getDate()) : (date.getDate());
-    return `${YYYY}-${MM}-${DD}`
-}
-let date = [dateFormat(aWeekAgo), dateFormat(today)];
+// const dateFormat = (date) => {
+//     let YYYY = date.getFullYear()
+//     let MM = (date.getMonth()+1) < 10 ? '0'+ (date.getMonth()+1) : (date.getMonth()+1);
+//     let DD = (date.getDate()+1) < 10 ? '0'+ (date.getDate()) : (date.getDate());
+//     return `${YYYY}-${MM}-${DD}`
+// }
+// let date = [dateFormat(aWeekAgo), dateFormat(today)];
 
-const genres = [
-    {"id": 12, "name": "모험"},
-    {"id": 14,"name": "판타지"},
-    {"id": 16, "name": "애니메이션"},
-    {"id": 18,"name": "드라마"},
-    {"id": 27,"name": "공포"},
-    {"id": 28, "name": "액션"},
-    {"id": 35, "name": "코미디"},
-    {"id": 36,"name": "역사"},
-    {"id": 37,"name": "서부"},
-    {"id": 53,"name": "스릴러"},
-    {"id": 80,"name": "범죄"},
-    {"id": 99,"name": "다큐멘터리"},
-    {"id": 878,"name": "SF"},
-    {"id": 9648,"name": "미스터리"},
-    {"id": 10402,"name": "음악"},
-    {"id": 10749,"name": "로맨스"},
-    {"id": 10751,"name": "가족"},
-    {"id": 10752,"name": "전쟁"},
-    {"id": 10770,"name": "TV 영화"},
-    {"id": 999999,"name": "2시간 이하 짧은 영화"}
-]
-const chooseTwoRandomGenres = () => {
-    const ranidx1 = Math.floor(Math.random() * genres.length);
-    let ranidx2;
-    do {
-        ranidx2 = Math.floor(Math.random() * genres.length);
-    }while(ranidx2 === ranidx1)
-    return [genres[ranidx1].id, genres[ranidx2].id]
-}
+// const genres = [
+//     {"id": 12, "name": "모험"},
+//     {"id": 14,"name": "판타지"},
+//     {"id": 16, "name": "애니메이션"},
+//     {"id": 18,"name": "드라마"},
+//     {"id": 27,"name": "공포"},
+//     {"id": 28, "name": "액션"},
+//     {"id": 35, "name": "코미디"},
+//     {"id": 36,"name": "역사"},
+//     {"id": 37,"name": "서부"},
+//     {"id": 53,"name": "스릴러"},
+//     {"id": 80,"name": "범죄"},
+//     {"id": 99,"name": "다큐멘터리"},
+//     {"id": 878,"name": "SF"},
+//     {"id": 9648,"name": "미스터리"},
+//     {"id": 10402,"name": "음악"},
+//     {"id": 10749,"name": "로맨스"},
+//     {"id": 10751,"name": "가족"},
+//     {"id": 10752,"name": "전쟁"},
+//     {"id": 10770,"name": "TV 영화"},
+//     {"id": 999999,"name": "2시간 이하 짧은 영화"}
+// ]
+// const chooseTwoRandomGenres = () => {
+//     const ranidx1 = Math.floor(Math.random() * genres.length);
+//     let ranidx2;
+//     do {
+//         ranidx2 = Math.floor(Math.random() * genres.length);
+//     }while(ranidx2 === ranidx1)
+//     return [genres[ranidx1].id, genres[ranidx2].id]
+// }
 
-let selectedGenres = chooseTwoRandomGenres();
-let keyword = '검색키워드';
+// let selectedGenres = chooseTwoRandomGenres();
+
 let visualId = [1184918, 402431, 533535, 1022789, 917496, 508442, 335983];    
 
 const instance = axios.create({
@@ -103,7 +103,7 @@ export async function apiSub01(page){
 }
 
 export async function apiSub02(page){
-    let [trending, top_rated] =  await Promise.all([
+    let [trending, topRated] =  await Promise.all([
         instance.get(`/trending/movie/week?page=${page}`),
         instance.get(`/movie/top_rated?sort_by=popularity.desc&page=${page}`),
 
@@ -111,14 +111,14 @@ export async function apiSub02(page){
     // return {trending, top_rated};
     return {
         trending: trending.data.results, 
-        top_rated: top_rated.data.results
+        topRated: topRated.data.results
     };
 }
 
-export async function apiSub03(page){
+export async function apiSub03(genreID, page){
     let [genres, twoHours] = await Promise.all([
-        instance.get(`/discover/movie?sort_by=popularity.desc&with_genres=28,878&page=${page}`),
-        instance.get(`/discover/movie?sort_by=popularity.desc&with_genres=28,878&with_runtime.lte=120&page=${page}`)
+        instance.get(`/discover/movie?sort_by=popularity.desc${genreID !== 999999 ? `&with_genres=${genreID}` : ''}&page=${page}`),
+        instance.get(`/discover/movie?sort_by=popularity.desc${genreID !== 999999 ? `&with_genres=${genreID}` : ''}&page=${page}&with_runtime.lte=120`)
     ])
     return {
         genres: genres.data.results, 
@@ -133,15 +133,16 @@ export async function apiDetails(movieId){
         instance.get(`/movie/${movieId}?append_to_response=videos,casts`),
         instance.get(`/movie/${movieId}/similar`)
     ])
+    // console.log((certification.data.results).find(item => item.iso_3166_1 === 'KR'))
     return {
         watchProviders: watchProviders.data.results.KR, 
-        certification: ( (certification.data.results).find(item => item.iso_3166_1 === 'KR') ).release_dates[0].certification,
+        certification: ( (certification.data.results).find(item => item.iso_3166_1 === 'KR') ? (certification.data.results).find(item => item.iso_3166_1 === 'KR').release_dates[0].certification : null  ),
         info: info.data, 
         similar:similar.data.results
     };
 }
 
-export async function apiSearchResult(keyword, page){
+export async function apiSearch(keyword, page){
     console.log(`검색어: ${keyword}`);
     let search = await instance.get(`/discover/movie?&sort_by=populcarity.desc&with_text_query=${keyword}&page=${page}`);
     return {

@@ -1,25 +1,20 @@
-import React, { useEffect } from 'react'
+import React, { Suspense } from 'react'
 import Header from './Header'
 import Footer from './Footer'
-import store from '../../store/store'
+import Loading from '../Loading'
+import TopBtn from './TopBtn'
 
 const Layout = ({ children }) => {
-  const { loading, apiMain } = store();
-
-  // useEffect(() => {
-  //   apiMain();
-  // },[])
-
 
   return ( 
     <>
       <Header/>
-      {/* {
-        loading ? <main><h2 className='loading'>Loading...</h2></main> :  */}
+      <Suspense fallback={ <Loading /> }>
         <main>
           {children}
         </main>
-       {/* } */}
+      </Suspense>
+      <TopBtn />
       <Footer/>
     </>
   )
