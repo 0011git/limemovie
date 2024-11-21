@@ -1,6 +1,6 @@
 [![logo](https://github.com/user-attachments/assets/f5124ab8-c308-40b5-a77f-204725a1efc1)](https://limemovie.vercel.app/)
 
-![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=white) ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=Vercel&logoColor=white) ![Zustand](https://img.shields.io/badge/Zustand-181717?style=flat-square&logo=redux&logoColor=white) ![Axios](https://img.shields.io/badge/Axios-5A29E6?style=flat-square&logo=axios&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=flat-square&logo=Postman&logoColor=white) ![Swiper](https://img.shields.io/badge/Swiper-6332F6?style=flat-square&logo=swiper&logoColor=white) ![SASS](https://img.shields.io/badge/SASS-CC6699?style=flat-square&logo=sass&logoColor=white)
+![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=white) ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=Vercel&logoColor=white) ![Swiper](https://img.shields.io/badge/Swiper-6332F6?style=flat-square&logo=swiper&logoColor=white) ![Zustand](https://img.shields.io/badge/Zustand-181717?style=flat-square&logo=redux&logoColor=white) ![Axios](https://img.shields.io/badge/Axios-5A29E6?style=flat-square&logo=axios&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=flat-square&logo=Postman&logoColor=white) ![SASS](https://img.shields.io/badge/SASS-CC6699?style=flat-square&logo=sass&logoColor=white)
 
 ## 🍋 LimeMovie
 TMDB API를 활용한 영화 정보 사이트 라임무비입니다.
@@ -14,7 +14,7 @@ TMDB API를 활용한 영화 정보 사이트 라임무비입니다.
 
 ## 📑 요약
 ### 1. 주제
-- 최신, 인기 등 여러 주제에 맞는 영화 정보 제공 사이트
+- 최신, 인기 등 여러 주제에 맞는 영화 정보 제공 사이트 (PC)
 
 ### 2. 목표
 - 영화 정보 제공 및 검색 기능
