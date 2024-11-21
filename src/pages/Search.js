@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import searchStyle from '../styles/search.module.scss'
 import { apiSearch } from '../api/instance'
 import LoadMoreBtn from '../components/sub/LoadMoreBtn'
@@ -36,7 +36,7 @@ const Search = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const keyword = queryParams.get('keyword');
-  let prevKeyword = '';
+  let prevKeyword = useRef('');
   const [searchResult, setSearchResult] = useState([]);
   const [page, setPage] = useState(1);
   const navi = useNavigate();
@@ -48,7 +48,7 @@ const Search = () => {
         setLoading(false)
     };
     fetchSearchResult();
-  }, [page]);
+  }, [page, setLoading]);
 
   useEffect(() => {
     const fetchSearchResult = async () => {
@@ -57,10 +57,10 @@ const Search = () => {
       const result = await apiSearch(keyword, page);
       console.log(result.search);
       setSearchResult(() => [...result.search])
-      prevKeyword = keyword;
+      prevKeyword.current = keyword;
     }
     if(prevKeyword !== keyword) fetchSearchResult();
-  }, [keyword])
+  }, [keyword, setLoading])
 
 
   console.log(searchResult);

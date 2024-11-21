@@ -26,7 +26,7 @@ const Details = () => {
             window.scrollTo({top:0})
         };        
         fetchDetails();
-    }, [state]);
+    }, [state, setLoading]);
 
     if(loading) return <Loading />;
 
