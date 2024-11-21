@@ -17,7 +17,6 @@ import { apiMain } from '../api/instance'
 import Loading from '../components/Loading';
 
 
-
 const Main = () => {
   const { loading, setLoading } = store();
   const [mainData, setMainData] = useState({});
@@ -179,7 +178,7 @@ const MainContents = ({ mainData }) => {
 // 제목 옆 더보기 버튼
 const ViewMoreBtn = ({path}) => {
   return (
-    <Link to={path}>
+    <Link to={path} onClick={() => window.scrollTo({top:0})}>
       <div className={mainStyle.viewMoreBtnWrap}>
         <button type='button'>더보기</button>
       </div>
