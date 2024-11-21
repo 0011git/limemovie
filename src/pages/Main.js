@@ -33,7 +33,6 @@ const Main = () => {
   },[])
 
   if(loading || !mainData.visual) return <Loading />
-  // console.log(mainData);
 
   return (
     <div>
