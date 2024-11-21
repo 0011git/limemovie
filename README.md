@@ -3,7 +3,7 @@
 ![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=white) ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=Vercel&logoColor=white) ![Swiper](https://img.shields.io/badge/Swiper-6332F6?style=flat-square&logo=swiper&logoColor=white) ![Zustand](https://img.shields.io/badge/Zustand-181717?style=flat-square&logo=redux&logoColor=white) ![Axios](https://img.shields.io/badge/Axios-5A29E6?style=flat-square&logo=axios&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=flat-square&logo=Postman&logoColor=white) ![SASS](https://img.shields.io/badge/SASS-CC6699?style=flat-square&logo=sass&logoColor=white)
 
 ## 🍋 LimeMovie
-TMDB API를 활용한 영화 정보 사이트 **LimeMovie**입니다.
+TMDB API를 활용한 영화 정보 사이트 **라임무비**입니다.
 
 ![limemovie_thumbnail_gif (1)](https://github.com/user-attachments/assets/03c52cca-54a4-4082-90db-2f296e52e611)
 
