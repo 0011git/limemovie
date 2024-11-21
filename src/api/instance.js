@@ -55,7 +55,7 @@ aWeekAgo.setDate(today.getDate() - 7);
 
 // let selectedGenres = chooseTwoRandomGenres();
 
-let visualId = [1184918, 402431, 533535, 1022789, 917496, 508442, 335983];    
+let visualId = [1241982, 1184918, 402431, 533535, 1022789, 917496, 508442, 335983];    
 
 const instance = axios.create({
     baseURL: 'https://api.themoviedb.org/3',

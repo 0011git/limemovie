@@ -79,13 +79,16 @@ const Search = () => {
 
   return (
     <form onSubmit={onSearch}>
-    <div className={headerStyle.searchWrap}>
-      <div className={`${headerStyle.search} ${active ? headerStyle.active : ''}`}>
-        <input value={keyword} id='search' onChange={(e) => insertKeyword(e)} type='text' placeholder='검색...' />
-        <label htmlFor='search'></label>
-        <button type="button" onClick={onReset} className={headerStyle.reset}></button>
+      <div className={headerStyle.searchWrap}>
+        <div className={`${headerStyle.search} ${active ? headerStyle.active : ''}`}>
+          <input value={keyword} id='search' onChange={(e) => insertKeyword(e)} type='text' placeholder='영화 검색하기' />
+          <label htmlFor='search'></label>
+          <button type="button" onClick={onReset} className={headerStyle.reset}></button>
+        </div>
+        <div className={headerStyle.searchBtnWrap}>
+          <button className={`${headerStyle.searchBtn} ${active ? headerStyle.active : ''}`} type='submit'>검색</button>
+        </div>
       </div>
-    </div>
     </form>
   )
 }

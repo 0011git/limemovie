@@ -5,6 +5,7 @@ import LoadMoreBtn from '../components/sub/LoadMoreBtn'
 import { useLocation } from 'react-router-dom';
 import store from '../store/store'
 import Loading from '../components/Loading';
+import { useNavigate } from 'react-router-dom';
 
 const Search = () => {
   const genres = [
@@ -35,9 +36,10 @@ const Search = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const keyword = queryParams.get('keyword');
-
+  let prevKeyword = '';
   const [searchResult, setSearchResult] = useState([]);
   const [page, setPage] = useState(1);
+  const navi = useNavigate();
 
   useEffect (() => {
     const fetchSearchResult = async () => {
@@ -45,28 +47,41 @@ const Search = () => {
         setSearchResult((prev) => [...prev, ...result.search])
         setLoading(false)
     };
-
     fetchSearchResult();
-  }, [keyword, page]);
+  }, [page]);
+
+  useEffect(() => {
+    const fetchSearchResult = async () => {
+      window.scrollTo({top:0})
+      setPage(1);
+      const result = await apiSearch(keyword, page);
+      console.log(result.search);
+      setSearchResult(() => [...result.search])
+      prevKeyword = keyword;
+    }
+    if(prevKeyword !== keyword) fetchSearchResult();
+  }, [keyword])
+
 
   console.log(searchResult);
   if(loading) return <Loading />
 
 
   return (
-    <div className={searchStyle.searchResultWrap}>
-      <section className={searchStyle.titleWrap}>
-        <h2>'{keyword}' 검색 결과</h2>        
-      </section>
+    <section className={searchStyle.searchResultWrap}>
+      <div className={searchStyle.titleWrap}>
+        <h2>'{keyword}' 검색 결과</h2>
+        {searchResult.length < 20 ? <p>총 {searchResult.length} 건</p> : <p>총 20+ 건</p>}       
+      </div>
 
-      <section className={searchStyle.searchResult}>
+      <div className={searchStyle.searchResult}>
         {searchResult.map((obj) => (
           <div key={obj.id} className={searchStyle.oneResult}>
-            <div className={searchStyle.imgWrap}>
+            <div className={searchStyle.imgWrap} onClick={() => navi('/details', {state: obj.id}) }>
               <img src={'https://image.tmdb.org/t/p/w300/' + obj.poster_path} alt={`${obj.title} 포스터`} />
             </div>
             <div className={searchStyle.textWrap}>
-              <h3>{obj.title}</h3>
+              <h3 onClick={() => navi('/details', {state: obj.id}) }>{obj.title}</h3>
               <ul>
                 <li>
                   {
@@ -82,9 +97,9 @@ const Search = () => {
             </div>
           </div>
         ))}
-      </section>
+      </div>
       <LoadMoreBtn page={page} setPage={setPage} />
-    </div>
+    </section>
   )
 }
 

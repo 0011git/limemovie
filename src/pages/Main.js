@@ -45,18 +45,14 @@ const Main = () => {
 
 // 메인 비주얼
 const Visual = ({ visualData }) => {
-  // console.log(visualData);
   const navi = useNavigate();
-  const [activeModal, setActiveModal] = useState(false);
   const [modalData, setModalData] = useState({});
+  const [isModalActive, setIsModalActive] = useState(false)
 
-  const onModal = (info) => {
-    console.log(info);
-    setActiveModal((prev)=> !prev)
-    setModalData(info)
+  const onModal = (video) => {
+    setIsModalActive(true)
+    setModalData(video)
   }
-
-
     return (
       <section className='visual'>
         <Swiper
@@ -87,8 +83,8 @@ const Visual = ({ visualData }) => {
                 >
                   {
                     (visualData.videos.results.slice(0,5)).map((obj) => (
-                      <SwiperSlide key={`${obj.id}_${obj.key}`}>
-                        <div className='youtubeWrap' onClick={() => onModal(obj)}>
+                      <SwiperSlide onClick={() => onModal(obj)} key={`${obj.id}_${obj.key}`}>
+                        <div className='youtubeWrap'>
                           <iframe allowFullScreen className='youtube' src={`https://www.youtube.com/embed/${obj.key}`} title={obj.name}></iframe>
                         </div>
                       </SwiperSlide>
@@ -100,7 +96,7 @@ const Visual = ({ visualData }) => {
           ))
         }
         </Swiper>
-        <ModalPopupForVideo video={modalData} />
+        <ModalPopupForVideo video={modalData} isModalActive={isModalActive} setIsModalActive={setIsModalActive} />
       </section>
     )
 }
@@ -191,11 +187,13 @@ const ViewMoreBtn = ({path}) => {
     </Link>
   )
 }
+
 // 비주얼-비디오 팝업
-const ModalPopupForVideo  = ({video}) => {
+const ModalPopupForVideo  = ({video, isModalActive, setIsModalActive}) => {
+  // ${isModalActive ? mainStyle.active : ''}
   return (
-    <div className={mainStyle.modal}>
-      <div className={mainStyle.modalBox}>
+    <div className={`${mainStyle.modalWrap} ${isModalActive ? mainStyle.active : ''}`} onClick={() => setIsModalActive(false)}>
+      <div className={mainStyle.modalBox} onClick={(e) => e.stopPropagation()}>
         <div className={mainStyle.videoWrap}>
           <iframe allowFullScreen className='youtube' src={`https://www.youtube.com/embed/${video.key}`} title={video.name}></iframe>
         </div>
@@ -220,9 +218,22 @@ const Subscribe = () => {
     }
   }
 
-  const onReset = () => {
+  const onReset = (e) => {
+    e.preventDefault();
     setEmail(''); 
     emailRef.current.classList.remove(mainStyle.activeSubscribe);
+  }
+
+  // 구독하기 버튼 클릭 시 실행하는 함수
+  const onSubscribe = () => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    let alertMsg = '';
+    if(!emailRegex.test(email)){
+      alertMsg = '유효하지 않은 이메일 주소입니다.';
+    }else{
+      alertMsg = '🍋구독 완료!';
+    }
+    return alert(alertMsg);
   }
   
   return (
@@ -231,9 +242,9 @@ const Subscribe = () => {
         <div className={mainStyle.inputWrap}>
           <label htmlFor='email'></label>
           <input value={email} onChange={onEmail} type='email' id='email' placeholder='movie@limemovie.com'/>
-          <button onClick={onReset} className={mainStyle.reset}></button>
+          <button onClick={onReset} className={mainStyle.reset} type='button'></button>
         </div>
-        <button>구독하기</button>
+        <button type='button' onClick={(e) => {onReset(e); onSubscribe();}}>구독하기</button>
       </div>
     </form>
   )

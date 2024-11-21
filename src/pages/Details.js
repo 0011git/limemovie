@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import detailStyle from '../styles/details.module.scss'
 import BasicSlide from '../components/slide/BasicSlide'
-// import CastSlide from '../components/slide/CastSlide'
-// import TrailerSlide from '../components/slide/TrailerSlide'
 import { apiDetails } from '../api/instance'
 import { useLocation } from 'react-router-dom'
 import store from '../store/store'
@@ -18,7 +16,6 @@ import Loading from '../components/Loading'
 const Details = () => {
     const { loading, setLoading } = store();
     const {state} = useLocation();  //id받기
-    // const [details, setDetails] = useState({watchProviders:{}, certification:{}, info:{}, similar:{}});
     const [details, setDetails] = useState({});
 
     useEffect (() => {
@@ -34,20 +31,17 @@ const Details = () => {
     if(loading) return <Loading />;
 
 
-  return (
-    <>
+    return (
         <div className={detailStyle.subDetailsWrap}>
             <SubVisual info={details.info} cer={details.certification} />
             <SubDetails info={details.info} watch={details.watchProviders} />
             <SubSimilar similar={details.similar} />
         </div>
-    </>
-  )
+    )
 }
 
 const SubVisual = ({info, cer}) => {
-    // if(info == undefined) return <Loading />;
-    // if(info?.genres?.length === 0) return<>Loading...</>;
+    if(info === undefined) return <Loading />;
 
     let ageRatingKR =''
     switch(cer){
@@ -101,31 +95,18 @@ const SubVisual = ({info, cer}) => {
 
 const SubDetails = ({info, watch}) => {
     if( info === undefined ) return <Loading />;
-    // if( watch.link !== '') return<>Loading...</>;
 
     let flatrate = [];
     let rent = [];
     let buy = [];
     // 시청
     console.log(info);
-    console.log(watch);
+
     if(watch !== undefined){
         flatrate = watch.flatrate?.length ? watch.flatrate : [];
         rent = watch.rent?.length ?  watch.rent : [];
         buy = watch.buy?.length ?  watch.buy : [];
     }
-
-    console.log(flatrate);
-    console.log(rent);
-    console.log(buy);
-    
-
-
-    //장르
-    // let genresArr = [];
-    // genresArr = (info.genres).map((g) => g.name)
-  
-
 
     return (
         <section className={detailStyle.subDetails}>
@@ -255,14 +236,6 @@ const SubDetails = ({info, watch}) => {
 }
 
 const SubSimilar = ({similar}) => {
-    // let posterArr =[];
-    // posterArr = (similar).map((obj) => (
-    //     {
-    //         id: obj.id,
-    //         poster: `https://image.tmdb.org/t/p/w300/${obj.poster_path}`
-    //     }
-    // ))
-    
     return (
         <section className={detailStyle.subSimilar}>
             <article>

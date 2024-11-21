@@ -1,6 +1,6 @@
 .overview{
-    width: 32%;
-    height: 320px;
+    width: 33%;
+    // height: 320px;
     padding: 40px 60px;
     position: absolute;
     background-color: rgba($color: #0C0B0E, $alpha: 0.3);
@@ -11,16 +11,15 @@
     h2{
         color: #fafafa;
         font-weight: 700;
-        font-size: 52px;
+        font-size: 40px;
     }
     p{
-        margin-top: 16px;
-        margin-bottom: 32px;
+        margin: 32px 0;
         color: #fafafa;
         line-height: 180%;
         display: -webkit-box;
         -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2; /* 최대 2줄로 제한 */
+        -webkit-line-clamp: 3; /* 최대 2줄로 제한 */
         overflow: hidden; /* 넘치는 내용 숨김 */
         text-overflow: ellipsis; /* 생략 부호 추가 */
     }
@@ -28,6 +27,7 @@
         padding: 12px 32px;
         border-radius: 8px;
         color: #19171B;
+        white-space: nowrap;
         font-weight: 700;
         background-color: #E3FF00;
         transition: 0.2s;
@@ -117,7 +117,7 @@
             top: 50%;
             right: 8%;
             transform: translate(50%, -50%);
-            background: url('../assets.img/reset.svg') center no-repeat;
+            background: url('../../public/assets/icons/x_circle_lime.svg') center no-repeat;
             background-size: contain;
         }
     }
@@ -129,5 +129,44 @@
         font-size: 18px;
         color: #19171B;
         white-space: nowrap;
+    }
+}
+
+.modalWrap{
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    background-color: rgba($color: #000000, $alpha: 0.5);
+    z-index: 1;
+    display: none;
+    position: relative;
+    &.active{
+        display: block;
+    }
+    .modalBox{
+        max-width: 1200px;
+        width: 70%;
+        height: 70%;
+        border-radius: 20px;
+        overflow: hidden;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 101;
+        .videoWrap{
+            width: 100%;
+            height: 100%;
+            iframe{
+                width: 100%;
+                height: 100%;
+
+            }
+        }
     }
 }

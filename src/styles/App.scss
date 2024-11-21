@@ -32,7 +32,7 @@ section{
       height: 36px;
       display: block;
       content: '';
-      background: url('../assets.img/logo.svg') center no-repeat;
+      background: url('../../public/assets/icons/logo.svg') center no-repeat;
       background-size: contain;
   }
 }
@@ -153,6 +153,7 @@ section{
         .youtubeWrap{
           width: 100%;
           height: 100%;
+          pointer-events: none; //클릭 시 재생 막기
           &.active{
             width: 1200px;
           }
@@ -225,7 +226,7 @@ section{
     content: '' !important;
     width: 24px;
     height: 120px;
-    background: url('../assets.img/prev.svg') center no-repeat;
+    background: url('../../public/assets/icons/prev.svg') center no-repeat;
   }
 
   &:hover{  //hover시 버튼 사이드 그림자
@@ -247,7 +248,7 @@ section{
     content: '' !important;
     width: 24px;
     height: 120px;
-    background: url('../assets.img/next.svg') center no-repeat;
+    background: url('../../public/assets/icons/next.svg') center no-repeat;
   }
   &:hover{
     background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.7));

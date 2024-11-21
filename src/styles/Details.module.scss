@@ -7,8 +7,7 @@
         position: relative;
         z-index: 99;
         .overview{
-            width: 32%;
-            height: 280px;
+            width: 33%;
             padding: 40px 60px;
             position: absolute;
             background-color: rgba($color: #0C0B0E, $alpha: 0.3);
@@ -133,13 +132,11 @@
             }
         }
         .watch{
-            h3{}
             .platforms{
                 li{
                     &.hide{
                         display: none;
                     }
-                    h4{}
                     ul{
                         display: flex;
                         flex-wrap: nowrap;
@@ -166,11 +163,9 @@
             }
         }
         .info{
-            h3{}
             ul{
                 li{
                     margin-bottom: 24px;
-                    h4{}
                     p{
                         width: 200px;
                         .infoGenres{
@@ -184,16 +179,11 @@
             }
         }
         .summary{
-            h3{}
             p{
                 line-height: 200%;
             }
         }
-        .casts{
-            
-        }
         .trailers{
-            h3{}
             .trailerSlide {
                 max-width: 1200px;
                 max-height: 800px;

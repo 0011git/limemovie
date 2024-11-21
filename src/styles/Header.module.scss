@@ -32,14 +32,16 @@
        .navWrap{
            width: 70%;
            display: flex;
-           justify-content: space-between;
+           justify-content: flex-end;
            align-items: center;
            nav{
                width: 45%;
                margin-right: 24px;
                text-align: right;
                .categoryGroup{
+                margin-right: 40px;
                 display: flex;
+                justify-content: flex-end;
                    .categoryCommon{
                        padding: 4px;
                        font-size: 20px;
@@ -59,16 +61,16 @@
 }
 
 .searchWrap{
-    width: 90%;
-    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     .search{
         width: 100%;
-        // min-width: 360px;
         position: relative;
         input{
             width: 100%;
-            padding: 12px 40px 12px 60px;
-            border-radius: 8px;
+            padding: 12px 32px 12px 40px;
+            border-radius: 8px 0 0 8px;
             background-color: #19171B;
             &::placeholder{
                 color: #3B383E;
@@ -81,7 +83,7 @@
             top: 50%;
             left: 8%;
             transform: translate(-50%, -50%);
-            background: url('../assets.img/search_grey.svg') center no-repeat;
+            background: url('../../public/assets/icons/search_grey.svg') center no-repeat;
             background-size: contain;
         }
         .reset{
@@ -90,22 +92,36 @@
             display: none;
             position: absolute;
             top: 50%;
-            right: 6%;
+            right: 8%;
             transform: translate(50%, -50%);
-            background: url('../assets.img/reset.svg') center no-repeat;
+            background: url('../../public/assets/icons/x_circle_lime.svg') center no-repeat;
             background-size: contain;
         }
         &.active{
             input{
                 color: #E3FF00;
+                border: 1px solid #E3FF00;
             }
             label{
-                background-image: url('../assets.img/search_lime.svg');
+                background-image: url('../../public/assets/icons/search_lime.svg');
             }
             .reset{
                 display: block;
             }
         }
         
+    }
+    .searchBtnWrap{
+        .searchBtn{
+            padding: 12px;
+            color: #3B383E;
+            background-color: #19171B;
+            border-radius: 0 8px 8px 0;
+            white-space: nowrap;
+            &.active{
+                background-color: #E3FF00;
+                color: #19171B;
+            }
+        }
     }
 }

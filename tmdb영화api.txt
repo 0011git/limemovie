@@ -1,15 +1,14 @@
-인사이드아웃2
-
 인터스텔라
 157336
 
-api키
-api_key=f89a6c1f22aca3858a4ae7aef10de967
+필수쿼리(3)
+1)api키
+&api_key=f89a6c1f22aca3858a4ae7aef10de967
 
-지역
+2)지역
 &region=KR
 
-언어
+3)언어
 &language=ko-kr
 
 사진 주소
@@ -21,14 +20,16 @@ https://image.tmdb.org/t/p/w300/
 
 
 0. 메인 비주얼
+내가 좋아하는 영화 넣기?
+or
+트랜드 랜덤 컨텐츠 뽑아서 넣기?
+
+영화 아이디 배열에 저장
 
 트렌딩(week)
 https://api.themoviedb.org/3/trending/movie/week?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR
 
-트렌딩(week) total_pages 1000개, 1~1000 중 랜덤 숫자 1개 선정
-1페이지 당 컨텐츠 20개, 0~19 중 랜덤 숫자 3개 5개 선정
-랜덤 컨텐츠 5개 뽑아서 아이디 배열에 저장
-각각 4.상세 페이지 - 상세정보 가져와서 이름, 줄거리 3줄, 이미지, 비디오, 스틸컷(있으면) 뿌리기
+각각 4.상세 페이지 - 상세정보 가져와서 이름, 줄거리 3줄, 이미지, 비디오 뿌리기
 https://api.themoviedb.org/3/movie/157336?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-kr&region=KR&append_to_response=videos,images
 
 
