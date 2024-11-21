@@ -112,11 +112,293 @@ TMDB API를 활용한 영화 정보 사이트 라임무비입니다.
 
 
 ## 🔍 API 분석
-### 1. 공통
-### 2. 메인
-### 3. 카테고리
-### 4. 디테일
-### 5. 검색
+- 공식 가이드 문서, TMDB Support, Postman 등을 참고 및 활용
+- 컨텐츠 제작에 필요한 API URL, 쿼리 등을 ```tmdb영화api.txt```로 정리
+- 수업 시간에 같은 반 학생들이 모두 동일한 API를 사용해서 프로젝트를 진행했기 때문에 공유하면 도움이 될거라는 판단 하에 반 전체에 공유 
+
+<details>
+  <summary>$\bf{{\color{#0969DA}tmdb영화api.txt\ 전문}}$</summary>
+
+  
+인터스텔라
+157336
+
+필수쿼리
+api키
+&api_key=f89a6c1f22aca3858a4ae7aef10de967
+
+무조건 넣을 쿼리
+1)지역
+&region=KR
+
+2)언어
+&language=ko-kr
+
+사진 주소
+https://image.tmdb.org/t/p/original/
+https://image.tmdb.org/t/p/w300/
+=====================================================
+메인비주얼: id 사진 타이틀 줄거리 동영상
+https://api.themoviedb.org/3/movie/157336?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-kr&region=KR&append_to_response=videos
+
+
+
+메인하단슬라이드: 주소 뒤에 &page=1 붙이기
+
+
+
+
+카테고리: id 사진 카테고리별정보(true|false로)
+
+1. 상영중
+<날짜 조정 필요함>
+이번 주 새로 개봉한 영화(영화관)
+https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&with_release_type=2|3&release_date.gte=2024-09-05&release_date.lte=2024-09-12
+
+이번 주 새로 개봉한 영화(디지털)
+https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&with_release_type=4&release_date.gte=2024-09-05&release_date.lte=2024-09-12
+
+이번 주 새로 개봉한 영화(영화관+디지털)
+https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&&region=KR&sort_by=popularity.desc&with_release_type=2|3|4&release_date.gte=2024-09-05&release_date.lte=2024-09-12
+
+상영 중인 영화(영화관) now_playing
+https://api.themoviedb.org/3/movie/now_playing?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR
+
+
+
+
+
+2. 인기
+지금 뜨는 콘텐츠(이번주) : trending/movie/week
+https://api.themoviedb.org/3/trending/movie/week?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR
+
+TOP 100 : 평점 높은 순(vote_average), popularity.desc 정렬, page=1~5까지
+https://api.themoviedb.org/3/movie/top_rated?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&page=1
+https://api.themoviedb.org/3/movie/top_rated?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&page=2
+https://api.themoviedb.org/3/movie/top_rated?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&page=3
+https://api.themoviedb.org/3/movie/top_rated?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&page=4
+https://api.themoviedb.org/3/movie/top_rated?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&page=5
+
+
+3. 장르(중복검색가능)
+https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&with_genres=28,878
+
+2시간이하
+https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&with_runtime.lte=120&with_genres=16,28
+
+
+검색: id 사진 타이틀 개봉연도 평점(vote_average) 장르2개 줄거리
+https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&with_text_query=노래
+
+
+디테일페이지(id필요): id 사진 타이틀 개봉연도 나이제한 시간 장르1개 줄거리 주연 
+            / 시청플랫폼 장르모두 평점 개봉연월일 출연 동영상 유사콘텐츠
+
+시청플랫폼(지역KR)
+https://api.themoviedb.org/3/movie/157336/watch/providers?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR
+
+나이제한(지역KR - certification)
+https://api.themoviedb.org/3/movie/157336/release_dates?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR
+
+나머지
+https://api.themoviedb.org/3/movie/157336?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-kr&region=KR&append_to_response=videos,casts
+
+
+======================================================
+
+0. 메인 비주얼
+내가 좋아하는 영화 넣기?
+or
+트랜드 랜덤 컨텐츠 뽑아서 넣기?
+
+영화 아이디 배열에 저장
+
+트렌딩(week)
+https://api.themoviedb.org/3/trending/movie/week?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR
+
+각각 4.상세 페이지 - 상세정보 가져와서 이름, 줄거리 3줄, 이미지, 비디오 뿌리기
+https://api.themoviedb.org/3/movie/157336?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-kr&region=KR&append_to_response=videos,images
+
+
+
+
+
+
+1. 상영중
+<날짜 조정 필요함>
+이번 주 새로 개봉한 영화(영화관)
+https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&with_release_type=2|3&release_date.gte=2024-09-05&release_date.lte=2024-09-12
+
+이번 주 새로 개봉한 영화(디지털)
+https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&&region=KR&sort_by=popularity.desc&with_release_type=4&release_date.gte=2024-09-05&release_date.lte=2024-09-12
+
+이번 주 새로 개봉한 영화(영화관+디지털)
+https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&&region=KR&sort_by=popularity.desc&with_release_type=2|3|4&release_date.gte=2024-09-05&release_date.lte=2024-09-12
+
+상영 중인 영화(영화관) now_playing
+https://api.themoviedb.org/3/movie/now_playing?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR
+
+
+
+
+
+2. 인기
+지금 뜨는 콘텐츠(이번주) : trending/movie/week
+https://api.themoviedb.org/3/trending/movie/week?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR
+
+
+TOP 100 : 평점 높은 순(vote_average) page=1~5까지
+https://api.themoviedb.org/3/movie/top_rated?language=ko-KR&region=KR&api_key=f89a6c1f22aca3858a4ae7aef10de967&page=1
+https://api.themoviedb.org/3/movie/top_rated?language=ko-KR&region=KR&api_key=f89a6c1f22aca3858a4ae7aef10de967&page=2
+https://api.themoviedb.org/3/movie/top_rated?language=ko-KR&region=KR&api_key=f89a6c1f22aca3858a4ae7aef10de967&page=3
+https://api.themoviedb.org/3/movie/top_rated?language=ko-KR&region=KR&api_key=f89a6c1f22aca3858a4ae7aef10de967&page=4
+https://api.themoviedb.org/3/movie/top_rated?language=ko-KR&region=KR&api_key=f89a6c1f22aca3858a4ae7aef10de967&page=5
+
+
+TOP 100(사용x) : popularity순서로 page=1~5까지
+https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&sort_by=popularity.desc&with_genres=28&language=ko-KR&region=KR&page=1
+https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&sort_by=popularity.desc&with_genres=28&language=ko-KR&region=KR&page=2
+https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&sort_by=popularity.desc&with_genres=28&language=ko-KR&region=KR&page=3
+https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&sort_by=popularity.desc&with_genres=28&language=ko-KR&region=KR&page=4
+https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&sort_by=popularity.desc&with_genres=28&language=ko-KR&region=KR&page=5
+
+
+
+
+
+3. 장르 (검색 시 기본 popularity 내림차순 정렬값 주는 것 같음)
+장르 종류 가져오기(하단 참조)
+https://api.themoviedb.org/3/genre/movie/list?language=ko-KR&api_key=f89a6c1f22aca3858a4ae7aef10de967
+
+장르 검색(and) (or검색도 있는데 필요 없을 것 같아서 제외)
+&with_genres=16,28
+https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&with_genres=16,28
+
+
+2시간 이하 &with_runtime.lte=120
+https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&with_runtime.lte=120&language=ko-KR&region=KR&sort_by=popularity.desc
+
+https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&keywords=%EC%95%84%EB%B0%94%ED%83%80
+
+
+
+
+
+
+
+4. 상세 페이지 : id필요
+
+상세정보
+https://api.themoviedb.org/3/movie/157336?api_key=f89a6c1f22aca3858a4ae7aef10de967&append_to_response=videos,images,casts
+
+시청 가능한 플랫폼(지역KR)
+https://api.themoviedb.org/3/movie/157336/watch/providers?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR
+
+유사영화목록 : 포스터, 제목만 사용
+https://api.themoviedb.org/3/movie/157336/similar ?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR
+
+나이제한(지역KR) 
+https://api.themoviedb.org/3/certification/movie/list?language=ko-KR&region=KR&api_key=f89a6c1f22aca3858a4ae7aef10de967
+https://api.themoviedb.org/3/movie/157336/release_dates?language=ko-KR&region=KR&api_key=f89a6c1f22aca3858a4ae7aef10de967
+
+
+
+
+5. 검색 query=아바타(popularity 내림차순 정렬된 자료로 줌)
+
+https://api.themoviedb.org/3/discover/movie?api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR&sort_by=popularity.desc&with_text_query=캔디&with_runtime.gte=0
+
+타이틀, 개봉연도, 시간, 장르, 줄거리
+https://api.themoviedb.org/3/search/movie?query=아바타&api_key=f89a6c1f22aca3858a4ae7aef10de967&language=ko-KR&region=KR
+
+나이제한(지역KR)
+https://api.themoviedb.org/3/movie/157336/release_dates?language=ko-KR&region=KR&api_key=f89a6c1f22aca3858a4ae7aef10de967
+
+
+
+
+
+=========================================================================================================================================
+
+트렌딩 trending/movie/
+오늘 day
+https://api.themoviedb.org/3/trending/movie/day?api_key=f89a6c1f22aca3858a4ae7aef10de967language=ko-KR&region=KR
+이번주 week
+https://api.themoviedb.org/3/trending/movie/week?api_key=f89a6c1f22aca3858a4ae7aef10de967language=ko-KR&region=KR
+
+
+
+발견discover (검색search와 다름)---------------------------------------------------------------------------------------
+https://api.themoviedb.org/3/discover/movie?
+&with_text_query=christmas 검색키워드
+
+이번주 개봉한 영화(discover만 적용되는 것 같음)
+종료일 &release_date.lte=2024-09-12
+시작일 &release_date.gte=2024-09-06
+
+영화관
+&with_release_type=2|3
+영화관+디지털
+&with_release_type=2|3|4
+
+
+개봉형태(discover만 적용되는 것 같음)
+1 Premiere
+2 Theatrical (limited)
+3 Theatrical
+4 Digital
+5 Physical
+6 TV
+
+
+정렬(discover만 적용되는 것 같음)
+&sort_by=popularity.desc
+최신순	    release_date.desc
+인기순	    popularity.desc
+오름차순	title.asc
+내림차순	title.desc
+
+
+2시간 이하 (discover만 적용되는 것 같음)
+&with_runtime.lte=120
+
+장르 검색(and) (discover만 적용되는 것 같음)
+&with_genres=16,28
+
+
+나이 제한(개봉일 데이터 certification에 있음)
+https://api.themoviedb.org/3/movie/${movieId}/release_dates
+[All, 12, 15, 19, 제한상영가] = [0, 1, 2, 3, 4]
+
+
+장르 종류
+"genres": [
+        {"id": 12, "name": "모험"},
+        {"id": 14, "name": "판타지"},
+        {"id": 16, "name": "애니메이션"},
+        {"id": 18, "name": "드라마"},
+        {"id": 27, "name": "공포"},
+
+        {"id": 28, "name": "액션"},
+        {"id": 35, "name": "코미디"},
+        {"id": 36, "name": "역사"},
+        {"id": 37, "name": "서부"}
+        {"id": 53, "name": "스릴러"},
+        
+        {"id": 80, "name": "범죄"},
+        {"id": 99, "name": "다큐멘터리"},
+        {"id": 878, "name": "SF"},
+        {"id": 9648, "name": "미스터리"},
+        {"id": 10402, "name": "음악"},
+        
+        {"id": 10749, "name": "로맨스"},
+        {"id": 10751, "name": "가족"},
+        {"id": 10752, "name": "전쟁"},
+        {"id": 10770, "name": "TV 영화"},
+    ]
+
+    
+</details>
 
 
 

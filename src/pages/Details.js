@@ -99,8 +99,6 @@ const SubDetails = ({info, watch}) => {
     let flatrate = [];
     let rent = [];
     let buy = [];
-    // 시청
-    console.log(info);
 
     if(watch !== undefined){
         flatrate = watch.flatrate?.length ? watch.flatrate : [];
@@ -275,7 +273,6 @@ const CastSlide = ({castsArr}) => {
 }
 
 const TrailerSlide = ({trailersArr}) => {
-    console.log(trailersArr);
     return (
       <Swiper
           className='trailerSlide'

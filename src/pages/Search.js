@@ -55,7 +55,6 @@ const Search = () => {
       window.scrollTo({top:0})
       setPage(1);
       const result = await apiSearch(keyword, page);
-      console.log(result.search);
       setSearchResult(() => [...result.search])
       prevKeyword.current = keyword;
     }
@@ -63,7 +62,6 @@ const Search = () => {
   }, [keyword, setLoading])
 
 
-  console.log(searchResult);
   if(loading) return <Loading />
 
 
