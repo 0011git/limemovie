@@ -5,7 +5,8 @@
 ## 🍋 LimeMovie
 TMDB API를 활용한 영화 정보 사이트 라임무비입니다.
 
-<!-- 썸네일 -->
+![limemovie_thumbnail_gif (1)](https://github.com/user-attachments/assets/03c52cca-54a4-4082-90db-2f296e52e611)
+
 
 ## 🔗 배포 URL
 <https://limemovie.vercel.app/>
