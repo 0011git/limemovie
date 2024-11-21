@@ -35,7 +35,7 @@ const Header = () => {
     return (
       <header className={`${headerStyle.header} ${down ? headerStyle.hide : ''}`}>
         <div className={headerStyle.inner}>
-          <h1 onClick={() => goToPage('/')} className={`logo ${headerStyle.logo}`} aria-label="라임무비 사이트 로고">
+          <h1 onClick={() => {goToPage('/'); window.scrollTo({top:0});}} className={`logo ${headerStyle.logo}`} aria-label="라임무비 사이트 로고">
             <span className={headerStyle.forScreenReader}>라임무비 LimeMovie</span>
           </h1>
           <div className={headerStyle.navWrap}>
